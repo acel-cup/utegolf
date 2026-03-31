@@ -7,45 +7,642 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root{--nav:#163949;--nav2:#224b5d;--green:#173f31;--green2:#245746;--gold:#c7a35b;--paper:#f5f0e4;--paper2:#fbf8f1;--line:#d7c59f;--ink:#24342d;--muted:#6d6a62;--shadow:0 12px 28px rgba(33,33,24,.12)}
-    body{background:var(--paper);color:var(--ink)}nav.container-fluid{background:linear-gradient(180deg,var(--nav2),var(--nav));border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:50}.font-normal{font-weight:normal}nav strong{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:2rem;font-weight:700}nav a{color:#f6f2e8!important;font-weight:700}nav [role=button]{background:transparent;border:1px solid rgba(255,255,255,.34);color:#f6f2e8}.surface{background:linear-gradient(180deg,#fbf8f1,#f3eadb);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow)}main.container{max-width:1180px;padding-top:1.2rem;padding-bottom:2rem}.panel{padding:18px}.panel h2,.panel h3{font-family:Georgia,'Times New Roman',serif;color:var(--green)}.muted{color:var(--muted)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.holes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.hole{background:#fffdf8;border:1px solid var(--line);border-radius:8px;padding:12px}.hole strong{display:block;font-family:Georgia,'Times New Roman',serif;color:var(--green)}.hidden{display:none!important}.note{padding:.95rem 1rem;border-radius:8px;border:1px dashed var(--line);background:#f5ecd9;color:#5f594d}.toast{position:fixed;right:1rem;bottom:1rem;background:#173f31;color:#fff;padding:.85rem 1rem;border-radius:12px;opacity:0;transform:translateY(8px);transition:.2s;z-index:100}.toast.show{opacity:1;transform:translateY(0)}@media (max-width:900px){.form-grid,.holes{grid-template-columns:1fr}}
+    :root{--nav:#163949;
+          --nav2:#224b5d;
+          --green:#173f31;
+          --green2:#245746;
+          --gold:#c7a35b;
+          --paper:#f5f0e4;
+          --paper2:#fbf8f1;
+          --line:#d7c59f;
+          --ink:#24342d;
+          --muted:#6d6a62;
+          --shadow:0 12px 28px rgba(33,33,24,.12)
+         }
+    
+    body{
+      background:
+        var(--paper);
+      color:var(--ink)
+    }
+    
+    nav.container-fluid{
+      background:linear-gradient(180deg,var(--nav2),var(--nav));
+      border-bottom:3px solid var(--gold);position:sticky;
+      top:0;
+      z-index:50
+    }
+    
+    .font-normal{
+      font-weight:normal
+     }
+    
+    nav strong{
+      font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:2rem;
+      font-weight:700
+    }
+    
+    nav a{
+      color:#f6f2e8!important;
+      font-weight:700
+    }
+    
+    nav [role=button]{
+      background:transparent;border:1px solid rgba(255,255,255,.34);
+      color:#f6f2e8}.surface{
+      background:linear-gradient(180deg,#fbf8f1,#f3eadb);
+      border:1px solid var(--line);border-radius:8px;
+      box-shadow:var(--shadow)
+    }
+    
+    main.container{
+      max-width:1180px;
+      padding-top:1.2rem;
+      padding-bottom:2rem
+    }
+    
+    .panel{
+      padding:18px
+    }
+    
+    .panel h2,.panel h3{
+      font-family:Georgia,'Times New Roman',serif;
+      color:var(--green)
+    }
+    .muted{
+      color:var(--muted)
+    }
+    
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px
+    }
+    
+    .holes{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px
+    }
+    
+    .hole{
+      background:#fffdf8;
+      border:1px solid var(--line);border-radius:8px;
+      padding:12px
+    }
+    
+    .hole strong{
+      display:block;
+      font-family:Georgia,'Times New Roman',serif;color:var(--green)
+    }
+    .hidden{
+      display:none!important
+    }
+    
+    .note{
+      padding:.95rem 1rem;
+      border-radius:8px;
+      border:1px dashed var(--line);
+      background:#f5ecd9;
+      color:#5f594d
+    }
+    
+    .toast{
+      position:fixed;
+      right:1rem;
+      bottom:1rem;
+      background:#173f31;
+      color:#fff;
+      padding:.85rem 1rem;
+      border-radius:12px;
+      opacity:0;
+      transform:translateY(8px);
+      transition:.2s;z-index:100
+    }
+    
+    .toast.show{
+      opacity:1;
+      transform:translateY(0)
+    }
+    @media (max-width:900px){
+      .form-grid,.holes{
+        grid-template-columns:1fr
+      }}
+    
   </style>
 </head>
 <body>
-<nav class="container-fluid"><ul><li><strong class="font-normal"><span style="color:#E30613">ACEL</span> <span style="color:#020A3A">CUP</span></strong></li></ul><ul><li><a href="index.html">Leaderboard</a></li><li><a href="register.html">Registrer Runde</a></li><li><a href="admin.html">Admin</a></li><li><a href="#auth" role="button" id="navAuthButton">Logg inn</a></li></ul></nav>
-<main class="container"><div class="grid"><section>
-<article class="surface panel" id="auth"><h2>Innlogging</h2><form id="authForm"><div class="form-grid"><div><label for="authEmail">E-post</label><input type="email" id="authEmail" placeholder="navn@firma.no" required></div><div><label for="authPassword">Passord</label><input type="password" id="authPassword" placeholder="Passord" required></div></div><div class="grid" style="margin-top:1rem;"><button type="submit">Logg inn</button><button type="button" class="secondary" id="signupBtn">Opprett konto</button><button type="button" class="secondary" id="logoutBtn">Logg ut</button></div><p id="authStatus" class="muted" style="margin-top:.8rem;">Ikke innlogget</p></form></article>
-<article class="surface panel" style="margin-top:1rem;"><h3>Spillerprofil</h3><form id="profileForm"><div class="form-grid"><div><label for="playerName">Navn</label><input type="text" id="playerName" placeholder="Fornavn Etternavn" required></div><div><label for="playerGender">Kjønn</label><select id="playerGender" required><option value="">Velg kjønn</option><option value="Mann">Mann</option><option value="Damer">Damer</option></select></div></div><button type="submit" style="margin-top:1rem;">Lagre spillerprofil</button><p id="profileStatus" class="muted" style="margin-top:.8rem;">Ingen profil lastet.</p></form></article>
-<article class="surface panel" style="margin-top:1rem;"><h3>Registrer Ny Runde</h3><div id="privateLocked" class="note">Du må være logget inn og ha spillerprofil for å registrere runde.</div><form id="roundForm" class="hidden"><div class="form-grid"><div><label for="roundPlayerText">Spiller</label><input type="text" id="roundPlayerText" readonly></div><div><label for="roundMarker">Markør</label><input type="text" id="roundMarker" placeholder="Navn på markør" required></div><div><label for="roundCourse">Bane</label><select id="roundCourse" required></select></div><div><label for="roundTee">Teested</label><select id="roundTee" required></select></div><div><label for="roundDate">Dato</label><input type="date" id="roundDate" required></div><div><label for="roundMonth">Måned</label><input type="text" id="roundMonth" readonly></div><div><label for="roundFormat">Runde</label><select id="roundFormat" required><option value="full">18 Hull</option><option value="front">Front 9</option><option value="back">Back 9</option></select></div><div><label for="roundHcp">Handicap</label><input type="number" id="roundHcp" step="0.1" min="0" max="54" placeholder="18.4" required></div></div><div id="teeInfoBox" class="muted" style="margin-top:1rem;">Velg bane og teested for å vise beregning.</div><h3 style="font-size:1.25rem;margin-top:1rem;">Slag per Hull</h3><div class="holes" id="holeInputs"></div><button type="submit" style="margin-top:1rem;">Registrer Runde</button><p id="roundStatus" class="muted" style="margin-top:.8rem;">Ingen runde lagret ennå.</p></form></article>
-</section></div></main>
+<nav class="container-fluid">
+  <ul>
+    <li>
+      <strong class="font-normal">
+        <span style="color:#E30613">ACEL</span> 
+        <span style="color:#020A3A">CUP</span>
+      </strong>
+    </li>
+  </ul>
+  <ul>
+    <li><a href="index.html">Leaderboard</a></li>
+    <li><a href="register.html">Registrer Runde</a></li>
+    <li><a href="admin.html">Admin</a></li>
+    <li><a href="#auth" role="button" id="navAuthButton">Logg inn</a></li>
+  </ul>
+</nav>
+<main class="container">
+  <div class="grid"><section>
+<article class="surface panel" id="auth">
+  <h2>Innlogging</h2>
+  <form id="authForm">
+    <div class="form-grid">
+      <div>
+        <label for="authEmail">E-post</label>
+        <input type="email" id="authEmail" placeholder="navn@firma.no" required></div>
+      <div><label for="authPassword">Passord</label>
+        <input type="password" id="authPassword" placeholder="Passord" required></div></div>
+    <div class="grid" style="margin-top:1rem;"><button type="submit">Logg inn</button>
+      <button type="button" class="secondary" id="signupBtn">Opprett konto</button>
+      <button type="button" class="secondary" id="logoutBtn">Logg ut</button></div>
+    <p id="authStatus" class="muted" style="margin-top:.8rem;">Ikke innlogget</p>
+  </form>
+</article>
+    
+<article class="surface panel" style="margin-top:1rem;">
+  <h3>Spillerprofil</h3>
+  <form id="profileForm">
+    <div class="form-grid">
+      <div>
+        <label for="playerName">Navn</label>
+        <input type="text" id="playerName" placeholder="Fornavn Etternavn" required></div>
+      <div>
+        <label for="playerGender">Kjønn</label>
+        <select id="playerGender" required>
+          <option value="">Velg kjønn</option>
+          <option value="Mann">Mann</option>
+          <option value="Damer">Damer</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" style="margin-top:1rem;">Lagre spillerprofil</button>
+    <p id="profileStatus" class="muted" style="margin-top:.8rem;">Ingen profil lastet.</p>
+  </form>
+</article>
+    
+<article class="surface panel" style="margin-top:1rem;">
+  <h3>Registrer Ny Runde</h3>
+  <div id="privateLocked" class="note">Du må være logget inn og ha spillerprofil for å registrere runde.</div>
+  <form id="roundForm" class="hidden">
+    <div class="form-grid">
+      <div>
+        <label for="roundPlayerText">Spiller</label>
+        <input type="text" id="roundPlayerText" readonly>
+      </div>
+      <div>
+        <label for="roundMarker">Markør</label>
+        <input type="text" id="roundMarker" placeholder="Navn på markør" required></div>
+      <div>
+        <label for="roundCourse">Bane</label>
+        <select id="roundCourse" required></select>
+      </div>
+      <div>
+        <label for="roundTee">Teested</label>
+        <select id="roundTee" required></select>
+      </div>
+      <div>
+        <label for="roundDate">Dato</label>
+        <input type="date" id="roundDate" required></div>
+      <div>
+        <label for="roundMonth">Måned</label>
+        <input type="text" id="roundMonth" readonly>
+      </div>
+      <div>
+        <label for="roundFormat">Runde</label>
+        <select id="roundFormat" required>
+          <option value="full">18 Hull</option>
+          <option value="front">Front 9</option>
+          <option value="back">Back 9</option>
+        </select>
+      </div>
+      
+      <div>
+        <label for="roundHcp">Handicap</label>
+        <input type="number" id="roundHcp" step="0.1" min="0" max="54" placeholder="18.4" required></div>
+    </div>
+    
+    <div id="teeInfoBox" class="muted" style="margin-top:1rem;">Velg bane og teested for å vise beregning.</div>
+    <h3 style="font-size:1.25rem;margin-top:1rem;">Slag per Hull</h3>
+    <div class="holes" id="holeInputs"></div>
+    <button type="submit" style="margin-top:1rem;">Registrer Runde</button>
+    <p id="roundStatus" class="muted" style="margin-top:.8rem;">Ingen runde lagret ennå.</p>
+  </form>
+</article>
+</section>
+  </div>
+</main>
+  
 <div class="toast" id="toast"></div>
 <script>
-const SUPABASE_URL='https://geduwhzlwdphouslxhsd.supabase.co'; const SUPABASE_ANON_KEY='sb_publishable_W8nt1u4S9htR3Zlz8-8SDA__cvNb_jG'; const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-const COURSE_ORDER=['Solnør GK','Giske GK','Volda GK','Sunnmøre GK','Rauma GK']; const MONTH_NAMES=['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
-const teeData=[{course:'Solnør GK',gender:'Mann',tee:'39',courseRating:63.9,slope:133,coursePar:72},{course:'Solnør GK',gender:'Damer',tee:'39',courseRating:66.7,slope:128,coursePar:72},{course:'Solnør GK',gender:'Mann',tee:'47',courseRating:67,slope:135,coursePar:72},{course:'Solnør GK',gender:'Damer',tee:'47',courseRating:71.3,slope:135,coursePar:72},{course:'Solnør GK',gender:'Mann',tee:'52',courseRating:69.8,slope:140,coursePar:72},{course:'Solnør GK',gender:'Damer',tee:'52',courseRating:74.9,slope:139,coursePar:72},{course:'Solnør GK',gender:'Mann',tee:'56',courseRating:71.1,slope:147,coursePar:72},{course:'Solnør GK',gender:'Damer',tee:'56',courseRating:77.1,slope:145,coursePar:72},{course:'Solnør GK',gender:'Mann',tee:'61',courseRating:74.1,slope:150,coursePar:72},{course:'Solnør GK',gender:'Damer',tee:'61',courseRating:80,slope:153,coursePar:72},{course:'Giske GK',gender:'Mann',tee:'41',courseRating:63.4,slope:121,coursePar:66},{course:'Giske GK',gender:'Mann',tee:'39',courseRating:62.6,slope:119,coursePar:66},{course:'Giske GK',gender:'Mann',tee:'35',courseRating:61.3,slope:117,coursePar:66},{course:'Giske GK',gender:'Mann',tee:'36',courseRating:61.9,slope:117,coursePar:66},{course:'Giske GK',gender:'Damer',tee:'41',courseRating:68.5,slope:120,coursePar:66},{course:'Giske GK',gender:'Damer',tee:'39',courseRating:67,slope:117,coursePar:66},{course:'Giske GK',gender:'Damer',tee:'36',courseRating:65.6,slope:114,coursePar:66},{course:'Giske GK',gender:'Damer',tee:'35',courseRating:64.5,slope:112,coursePar:66},{course:'Giske GK',gender:'Damer',tee:'33',courseRating:63.2,slope:113,coursePar:66},{course:'Volda GK',gender:'Mann',tee:'Gul',courseRating:67.1,slope:117,coursePar:70},{course:'Volda GK',gender:'Mann',tee:'Rød',courseRating:64,slope:110,coursePar:70},{course:'Volda GK',gender:'Damer',tee:'Gul',courseRating:70.3,slope:126,coursePar:70},{course:'Volda GK',gender:'Damer',tee:'Rød',courseRating:65.3,slope:113,coursePar:70},{course:'Sunnmøre GK',gender:'Mann',tee:'63',courseRating:75.9,slope:135,coursePar:74},{course:'Sunnmøre GK',gender:'Mann',tee:'60',courseRating:75.9,slope:130,coursePar:74},{course:'Sunnmøre GK',gender:'Mann',tee:'56',courseRating:74.7,slope:122,coursePar:74},{course:'Sunnmøre GK',gender:'Mann',tee:'52',courseRating:71,slope:118,coursePar:74},{course:'Sunnmøre GK',gender:'Damer',tee:'63',courseRating:null,slope:null,coursePar:74},{course:'Sunnmøre GK',gender:'Damer',tee:'60',courseRating:null,slope:null,coursePar:74},{course:'Sunnmøre GK',gender:'Damer',tee:'56',courseRating:null,slope:null,coursePar:74},{course:'Sunnmøre GK',gender:'Damer',tee:'52',courseRating:null,slope:null,coursePar:74},{course:'Rauma GK',gender:'Mann',tee:'42',courseRating:64.2,slope:121,coursePar:66},{course:'Rauma GK',gender:'Mann',tee:'37',courseRating:62.8,slope:116,coursePar:66},{course:'Rauma GK',gender:'Damer',tee:'42',courseRating:68.2,slope:124,coursePar:66},{course:'Rauma GK',gender:'Damer',tee:'37',courseRating:65.4,slope:118,coursePar:66}];
-const holeData=[{course:'Solnør GK',hole:1,index:15,par:4},{course:'Solnør GK',hole:2,index:5,par:5},{course:'Solnør GK',hole:3,index:13,par:3},{course:'Solnør GK',hole:4,index:1,par:5},{course:'Solnør GK',hole:5,index:9,par:4},{course:'Solnør GK',hole:6,index:3,par:4},{course:'Solnør GK',hole:7,index:11,par:4},{course:'Solnør GK',hole:8,index:7,par:4},{course:'Solnør GK',hole:9,index:17,par:3},{course:'Solnør GK',hole:10,index:10,par:4},{course:'Solnør GK',hole:11,index:4,par:5},{course:'Solnør GK',hole:12,index:18,par:3},{course:'Solnør GK',hole:13,index:16,par:4},{course:'Solnør GK',hole:14,index:6,par:5},{course:'Solnør GK',hole:15,index:14,par:3},{course:'Solnør GK',hole:16,index:12,par:4},{course:'Solnør GK',hole:17,index:8,par:4},{course:'Solnør GK',hole:18,index:2,par:4},{course:'Giske GK',hole:1,index:17,par:3},{course:'Giske GK',hole:2,index:3,par:4},{course:'Giske GK',hole:3,index:5,par:5},{course:'Giske GK',hole:4,index:1,par:3},{course:'Giske GK',hole:5,index:7,par:3},{course:'Giske GK',hole:6,index:13,par:4},{course:'Giske GK',hole:7,index:11,par:4},{course:'Giske GK',hole:8,index:15,par:3},{course:'Giske GK',hole:9,index:9,par:4},{course:'Giske GK',hole:10,index:18,par:3},{course:'Giske GK',hole:11,index:4,par:4},{course:'Giske GK',hole:12,index:6,par:5},{course:'Giske GK',hole:13,index:2,par:3},{course:'Giske GK',hole:14,index:8,par:3},{course:'Giske GK',hole:15,index:14,par:4},{course:'Giske GK',hole:16,index:12,par:4},{course:'Giske GK',hole:17,index:16,par:3},{course:'Giske GK',hole:18,index:10,par:4},{course:'Volda GK',hole:1,index:13,par:4},{course:'Volda GK',hole:2,index:3,par:3},{course:'Volda GK',hole:3,index:5,par:4},{course:'Volda GK',hole:4,index:7,par:5},{course:'Volda GK',hole:5,index:11,par:4},{course:'Volda GK',hole:6,index:17,par:4},{course:'Volda GK',hole:7,index:9,par:3},{course:'Volda GK',hole:8,index:15,par:4},{course:'Volda GK',hole:9,index:1,par:4},{course:'Volda GK',hole:10,index:16,par:4},{course:'Volda GK',hole:11,index:12,par:3},{course:'Volda GK',hole:12,index:6,par:4},{course:'Volda GK',hole:13,index:10,par:5},{course:'Volda GK',hole:14,index:14,par:4},{course:'Volda GK',hole:15,index:2,par:3},{course:'Volda GK',hole:16,index:8,par:3},{course:'Volda GK',hole:17,index:18,par:4},{course:'Volda GK',hole:18,index:4,par:5},{course:'Sunnmøre GK',hole:1,index:11,par:4},{course:'Sunnmøre GK',hole:2,index:1,par:5},{course:'Sunnmøre GK',hole:3,index:7,par:4},{course:'Sunnmøre GK',hole:4,index:13,par:4},{course:'Sunnmøre GK',hole:5,index:15,par:3},{course:'Sunnmøre GK',hole:6,index:5,par:5},{course:'Sunnmøre GK',hole:7,index:17,par:3},{course:'Sunnmøre GK',hole:8,index:9,par:4},{course:'Sunnmøre GK',hole:9,index:3,par:5},{course:'Sunnmøre GK',hole:10,index:12,par:4},{course:'Sunnmøre GK',hole:11,index:2,par:5},{course:'Sunnmøre GK',hole:12,index:8,par:4},{course:'Sunnmøre GK',hole:13,index:14,par:4},{course:'Sunnmøre GK',hole:14,index:16,par:3},{course:'Sunnmøre GK',hole:15,index:6,par:5},{course:'Sunnmøre GK',hole:16,index:18,par:3},{course:'Sunnmøre GK',hole:17,index:10,par:4},{course:'Sunnmøre GK',hole:18,index:4,par:5},{course:'Rauma GK',hole:1,index:15,par:3},{course:'Rauma GK',hole:2,index:7,par:4},{course:'Rauma GK',hole:3,index:3,par:3},{course:'Rauma GK',hole:4,index:5,par:4},{course:'Rauma GK',hole:5,index:1,par:5},{course:'Rauma GK',hole:6,index:17,par:3},{course:'Rauma GK',hole:7,index:13,par:3},{course:'Rauma GK',hole:8,index:9,par:4},{course:'Rauma GK',hole:9,index:11,par:4},{course:'Rauma GK',hole:10,index:18,par:3},{course:'Rauma GK',hole:11,index:6,par:4},{course:'Rauma GK',hole:12,index:10,par:3},{course:'Rauma GK',hole:13,index:4,par:4},{course:'Rauma GK',hole:14,index:2,par:5},{course:'Rauma GK',hole:15,index:14,par:3},{course:'Rauma GK',hole:16,index:16,par:3},{course:'Rauma GK',hole:17,index:8,par:4},{course:'Rauma GK',hole:18,index:12,par:4}];
+const SUPABASE_URL='https://geduwhzlwdphouslxhsd.supabase.co'; 
+  const SUPABASE_ANON_KEY='sb_publishable_W8nt1u4S9htR3Zlz8-8SDA__cvNb_jG'; 
+  const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const COURSE_ORDER=['Solnør GK','Giske GK','Volda GK','Sunnmøre GK','Rauma GK']; 
+  const MONTH_NAMES=['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
+const teeData=[
+  {course:'Solnør GK',gender:'Mann',tee:'39',courseRating:63.9,slope:133,coursePar:72},
+  {course:'Solnør GK',gender:'Damer',tee:'39',courseRating:66.7,slope:128,coursePar:72},
+  {course:'Solnør GK',gender:'Mann',tee:'47',courseRating:67,slope:135,coursePar:72},
+  {course:'Solnør GK',gender:'Damer',tee:'47',courseRating:71.3,slope:135,coursePar:72},
+  {course:'Solnør GK',gender:'Mann',tee:'52',courseRating:69.8,slope:140,coursePar:72},
+  {course:'Solnør GK',gender:'Damer',tee:'52',courseRating:74.9,slope:139,coursePar:72},
+  {course:'Solnør GK',gender:'Mann',tee:'56',courseRating:71.1,slope:147,coursePar:72},
+  {course:'Solnør GK',gender:'Damer',tee:'56',courseRating:77.1,slope:145,coursePar:72},
+  {course:'Solnør GK',gender:'Mann',tee:'61',courseRating:74.1,slope:150,coursePar:72},
+  {course:'Solnør GK',gender:'Damer',tee:'61',courseRating:80,slope:153,coursePar:72},
+  {course:'Giske GK',gender:'Mann',tee:'41',courseRating:63.4,slope:121,coursePar:66},
+  {course:'Giske GK',gender:'Mann',tee:'39',courseRating:62.6,slope:119,coursePar:66},
+  {course:'Giske GK',gender:'Mann',tee:'35',courseRating:61.3,slope:117,coursePar:66},
+  {course:'Giske GK',gender:'Mann',tee:'36',courseRating:61.9,slope:117,coursePar:66},
+  {course:'Giske GK',gender:'Damer',tee:'41',courseRating:68.5,slope:120,coursePar:66},
+  {course:'Giske GK',gender:'Damer',tee:'39',courseRating:67,slope:117,coursePar:66},
+  {course:'Giske GK',gender:'Damer',tee:'36',courseRating:65.6,slope:114,coursePar:66},
+  {course:'Giske GK',gender:'Damer',tee:'35',courseRating:64.5,slope:112,coursePar:66},
+  {course:'Giske GK',gender:'Damer',tee:'33',courseRating:63.2,slope:113,coursePar:66},
+  {course:'Volda GK',gender:'Mann',tee:'Gul',courseRating:67.1,slope:117,coursePar:70},
+  {course:'Volda GK',gender:'Mann',tee:'Rød',courseRating:64,slope:110,coursePar:70},
+  {course:'Volda GK',gender:'Damer',tee:'Gul',courseRating:70.3,slope:126,coursePar:70},
+  {course:'Volda GK',gender:'Damer',tee:'Rød',courseRating:65.3,slope:113,coursePar:70},
+  {course:'Sunnmøre GK',gender:'Mann',tee:'63',courseRating:75.9,slope:135,coursePar:74},
+  {course:'Sunnmøre GK',gender:'Mann',tee:'60',courseRating:75.9,slope:130,coursePar:74},
+  {course:'Sunnmøre GK',gender:'Mann',tee:'56',courseRating:74.7,slope:122,coursePar:74},
+  {course:'Sunnmøre GK',gender:'Mann',tee:'52',courseRating:71,slope:118,coursePar:74},
+  {course:'Sunnmøre GK',gender:'Damer',tee:'63',courseRating:null,slope:null,coursePar:74},
+  {course:'Sunnmøre GK',gender:'Damer',tee:'60',courseRating:null,slope:null,coursePar:74},
+  {course:'Sunnmøre GK',gender:'Damer',tee:'56',courseRating:null,slope:null,coursePar:74},
+  {course:'Sunnmøre GK',gender:'Damer',tee:'52',courseRating:null,slope:null,coursePar:74},
+  {course:'Rauma GK',gender:'Mann',tee:'42',courseRating:64.2,slope:121,coursePar:66},
+  {course:'Rauma GK',gender:'Mann',tee:'37',courseRating:62.8,slope:116,coursePar:66},
+  {course:'Rauma GK',gender:'Damer',tee:'42',courseRating:68.2,slope:124,coursePar:66},
+  {course:'Rauma GK',gender:'Damer',tee:'37',courseRating:65.4,slope:118,coursePar:66}];
+const holeData=[
+  {course:'Solnør GK',hole:1,index:15,par:4},
+  {course:'Solnør GK',hole:2,index:5,par:5},
+  {course:'Solnør GK',hole:3,index:13,par:3},
+  {course:'Solnør GK',hole:4,index:1,par:5},
+  {course:'Solnør GK',hole:5,index:9,par:4},
+  {course:'Solnør GK',hole:6,index:3,par:4},
+  {course:'Solnør GK',hole:7,index:11,par:4},
+  {course:'Solnør GK',hole:8,index:7,par:4},
+  {course:'Solnør GK',hole:9,index:17,par:3},
+  {course:'Solnør GK',hole:10,index:10,par:4},
+  {course:'Solnør GK',hole:11,index:4,par:5},
+  {course:'Solnør GK',hole:12,index:18,par:3},
+  {course:'Solnør GK',hole:13,index:16,par:4},
+  {course:'Solnør GK',hole:14,index:6,par:5},
+  {course:'Solnør GK',hole:15,index:14,par:3},
+  {course:'Solnør GK',hole:16,index:12,par:4},
+  {course:'Solnør GK',hole:17,index:8,par:4},
+  {course:'Solnør GK',hole:18,index:2,par:4},
+  {course:'Giske GK',hole:1,index:17,par:3},
+  {course:'Giske GK',hole:2,index:3,par:4},
+  {course:'Giske GK',hole:3,index:5,par:5},
+  {course:'Giske GK',hole:4,index:1,par:3},
+  {course:'Giske GK',hole:5,index:7,par:3},
+  {course:'Giske GK',hole:6,index:13,par:4},
+  {course:'Giske GK',hole:7,index:11,par:4},
+  {course:'Giske GK',hole:8,index:15,par:3},
+  {course:'Giske GK',hole:9,index:9,par:4},
+  {course:'Giske GK',hole:10,index:18,par:3},
+  {course:'Giske GK',hole:11,index:4,par:4},
+  {course:'Giske GK',hole:12,index:6,par:5},
+  {course:'Giske GK',hole:13,index:2,par:3},
+  {course:'Giske GK',hole:14,index:8,par:3},
+  {course:'Giske GK',hole:15,index:14,par:4},
+  {course:'Giske GK',hole:16,index:12,par:4},
+  {course:'Giske GK',hole:17,index:16,par:3},
+  {course:'Giske GK',hole:18,index:10,par:4},
+  {course:'Volda GK',hole:1,index:13,par:4},
+  {course:'Volda GK',hole:2,index:3,par:3},
+  {course:'Volda GK',hole:3,index:5,par:4},
+  {course:'Volda GK',hole:4,index:7,par:5},
+  {course:'Volda GK',hole:5,index:11,par:4},
+  {course:'Volda GK',hole:6,index:17,par:4},
+  {course:'Volda GK',hole:7,index:9,par:3},
+  {course:'Volda GK',hole:8,index:15,par:4},
+  {course:'Volda GK',hole:9,index:1,par:4},
+  {course:'Volda GK',hole:10,index:16,par:4},
+  {course:'Volda GK',hole:11,index:12,par:3},
+  {course:'Volda GK',hole:12,index:6,par:4},
+  {course:'Volda GK',hole:13,index:10,par:5},
+  {course:'Volda GK',hole:14,index:14,par:4},
+  {course:'Volda GK',hole:15,index:2,par:3},
+  {course:'Volda GK',hole:16,index:8,par:3},
+  {course:'Volda GK',hole:17,index:18,par:4},
+  {course:'Volda GK',hole:18,index:4,par:5},
+  {course:'Sunnmøre GK',hole:1,index:11,par:4},
+  {course:'Sunnmøre GK',hole:2,index:1,par:5},
+  {course:'Sunnmøre GK',hole:3,index:7,par:4},
+  {course:'Sunnmøre GK',hole:4,index:13,par:4},
+  {course:'Sunnmøre GK',hole:5,index:15,par:3},
+  {course:'Sunnmøre GK',hole:6,index:5,par:5},
+  {course:'Sunnmøre GK',hole:7,index:17,par:3},
+  {course:'Sunnmøre GK',hole:8,index:9,par:4},
+  {course:'Sunnmøre GK',hole:9,index:3,par:5},
+  {course:'Sunnmøre GK',hole:10,index:12,par:4},
+  {course:'Sunnmøre GK',hole:11,index:2,par:5},
+  {course:'Sunnmøre GK',hole:12,index:8,par:4},
+  {course:'Sunnmøre GK',hole:13,index:14,par:4},
+  {course:'Sunnmøre GK',hole:14,index:16,par:3},
+  {course:'Sunnmøre GK',hole:15,index:6,par:5},
+  {course:'Sunnmøre GK',hole:16,index:18,par:3},
+  {course:'Sunnmøre GK',hole:17,index:10,par:4},
+  {course:'Sunnmøre GK',hole:18,index:4,par:5},
+  {course:'Rauma GK',hole:1,index:15,par:3},
+  {course:'Rauma GK',hole:2,index:7,par:4},
+  {course:'Rauma GK',hole:3,index:3,par:3},
+  {course:'Rauma GK',hole:4,index:5,par:4},
+  {course:'Rauma GK',hole:5,index:1,par:5},
+  {course:'Rauma GK',hole:6,index:17,par:3},
+  {course:'Rauma GK',hole:7,index:13,par:3},
+  {course:'Rauma GK',hole:8,index:9,par:4},
+  {course:'Rauma GK',hole:9,index:11,par:4},
+  {course:'Rauma GK',hole:10,index:18,par:3},
+  {course:'Rauma GK',hole:11,index:6,par:4},
+  {course:'Rauma GK',hole:12,index:10,par:3},
+  {course:'Rauma GK',hole:13,index:4,par:4},
+  {course:'Rauma GK',hole:14,index:2,par:5},
+  {course:'Rauma GK',hole:15,index:14,par:3},
+  {course:'Rauma GK',hole:16,index:16,par:3},
+  {course:'Rauma GK',hole:17,index:8,par:4},
+  {course:'Rauma GK',hole:18,index:12,par:4}];
+  
 const state={session:null,profile:null};
-const el={authForm:document.getElementById('authForm'),authEmail:document.getElementById('authEmail'),authPassword:document.getElementById('authPassword'),signupBtn:document.getElementById('signupBtn'),logoutBtn:document.getElementById('logoutBtn'),authStatus:document.getElementById('authStatus'),profileForm:document.getElementById('profileForm'),playerName:document.getElementById('playerName'),playerGender:document.getElementById('playerGender'),profileStatus:document.getElementById('profileStatus'),privateLocked:document.getElementById('privateLocked'),roundForm:document.getElementById('roundForm'),roundPlayerText:document.getElementById('roundPlayerText'),roundMarker:document.getElementById('roundMarker'),roundDate:document.getElementById('roundDate'),roundMonth:document.getElementById('roundMonth'),roundCourse:document.getElementById('roundCourse'),roundTee:document.getElementById('roundTee'),roundFormat:document.getElementById('roundFormat'),roundHcp:document.getElementById('roundHcp'),teeInfoBox:document.getElementById('teeInfoBox'),holeInputs:document.getElementById('holeInputs'),roundStatus:document.getElementById('roundStatus'),toast:document.getElementById('toast')};
-function bindEvents(){ el.authForm.addEventListener('submit',onLogin); el.signupBtn.addEventListener('click',onSignup); el.logoutBtn.addEventListener('click',onLogout); el.profileForm.addEventListener('submit',onSaveProfile); el.roundForm.addEventListener('submit',onAddRound); el.roundDate.addEventListener('change',syncRoundMonth); el.roundCourse.addEventListener('change',onRoundCourseChange); el.roundTee.addEventListener('change',updateTeeInfoBox); el.roundHcp.addEventListener('input',updateTeeInfoBox); el.roundFormat.addEventListener('change',updateHoleInputsVisibility);} bindEvents();
-function setToday(){ el.roundDate.value=new Date().toISOString().slice(0,10); syncRoundMonth(); } setToday();
-function populateCourseSelect(){ el.roundCourse.innerHTML=''; COURSE_ORDER.forEach(course=>{ const opt=document.createElement('option'); opt.value=course; opt.textContent=course; el.roundCourse.appendChild(opt); }); onRoundCourseChange(); } populateCourseSelect();
-function formatMonthKey(key){ const [y,m]=key.split('-'); return MONTH_NAMES[Number(m)-1]+' '+y; } function syncRoundMonth(){ el.roundMonth.value=el.roundDate.value?formatMonthKey(el.roundDate.value.slice(0,7)):''; }
-function getTeeRecord(course,gender,tee){ return teeData.find(t=>t.course===course&&t.gender===gender&&String(t.tee)===String(tee))||null; } function getCourseHoles(course){ return holeData.filter(h=>h.course===course).sort((a,b)=>a.hole-b.hole); }
-function onRoundCourseChange(){ const course=el.roundCourse.value; const gender=state.profile?.gender||el.playerGender.value||'Mann'; const options=teeData.filter(t=>t.course===course&&t.gender===gender); el.roundTee.innerHTML=options.length?options.map(t=>`<option value="${String(t.tee)}">${t.tee}</option>`).join(''):'<option value="">Ingen teevalg tilgjengelig</option>'; renderHoleInputs(); updateHoleInputsVisibility(); updateTeeInfoBox(); }
-function renderHoleInputs(){ const holes=getCourseHoles(el.roundCourse.value); el.holeInputs.innerHTML=holes.map(h=>`<div class="hole"><strong>Hull ${h.hole}</strong><div class="muted">Par ${h.par} • Index ${h.index}</div><label for="gross_hole_${h.hole}">Slag</label><input type="number" id="gross_hole_${h.hole}" min="1" step="1" placeholder="0"></div>`).join(''); }
-function updateHoleInputsVisibility(){ const format=el.roundFormat.value; document.querySelectorAll('.hole').forEach(card=>{ const hole=Number(card.querySelector('strong').textContent.replace('Hull ','')); const show=format==='full'||(format==='front'&&hole<=9)||(format==='back'&&hole>=10); card.classList.toggle('hidden',!show); const input=card.querySelector('input'); input.required=show; if(!show) input.value=''; }); }
-function computePlayingHandicap(exactHcp,teeRecord){ return Math.round(exactHcp*(teeRecord.slope/113)+(teeRecord.courseRating-teeRecord.coursePar)); }
-function updateTeeInfoBox(){ const tee=getTeeRecord(el.roundCourse.value,state.profile?.gender||el.playerGender.value,el.roundTee.value); const hcp=Number(el.roundHcp.value); if(!tee){ el.teeInfoBox.textContent='Fant ikke teeoppsett for valgt spiller, bane og teested.'; return; } if(tee.courseRating==null||tee.slope==null){ el.teeInfoBox.textContent='Valgt tee mangler Course Rating eller Slope.'; return; } const phcp=Number.isFinite(hcp)?computePlayingHandicap(hcp,tee):'—'; el.teeInfoBox.textContent=`${tee.course} • ${tee.gender} • Tee ${tee.tee} • CR ${tee.courseRating} • Slope ${tee.slope} • Par ${tee.coursePar} • PHCP ${phcp}`; }
-function getFrontBackPars(course){ const holes=getCourseHoles(course); const front=holes.filter(h=>h.hole<=9).reduce((s,h)=>s+h.par,0); const back=holes.filter(h=>h.hole>=10).reduce((s,h)=>s+h.par,0); return { front,back,total:front+back }; }
-function strokesReceivedOnHole(playingHandicap,holeIndex){ return Math.max(0,1+Math.floor((playingHandicap-holeIndex)/18)); }
-async function refreshAuth(){ const { data }=await supabaseClient.auth.getSession(); state.session=data.session||null; if(!state.session?.user){ state.profile=null; el.authStatus.textContent='Ikke innlogget'; el.profileStatus.textContent='Ingen profil lastet.'; el.privateLocked.classList.remove('hidden'); el.roundForm.classList.add('hidden'); return; } el.authStatus.textContent=`Innlogget som ${state.session.user.email}`; const { data:profile }=await supabaseClient.from('players').select('*').eq('user_id',state.session.user.id).maybeSingle(); state.profile=profile||null; if(state.profile){ el.playerName.value=state.profile.name||''; el.playerGender.value=state.profile.gender||''; el.profileStatus.textContent=`Profil lastet: ${state.profile.name} (${state.profile.gender})`; el.privateLocked.classList.add('hidden'); el.roundForm.classList.remove('hidden'); el.roundPlayerText.value=state.profile.name; onRoundCourseChange(); } }
-async function onLogin(e){ e.preventDefault(); const { error }=await supabaseClient.auth.signInWithPassword({ email:el.authEmail.value.trim(), password:el.authPassword.value }); if(error){ showToast('Innlogging feilet: '+error.message); return; } await refreshAuth(); showToast('Innlogget.'); }
-async function onSignup(){ const { error }=await supabaseClient.auth.signUp({ email:el.authEmail.value.trim(), password:el.authPassword.value }); if(error){ showToast('Kunne ikke opprette konto: '+error.message); return; } showToast('Konto opprettet.'); }
-async function onLogout(){ const { error }=await supabaseClient.auth.signOut(); if(error){ showToast('Utlogging feilet: '+error.message); return; } await refreshAuth(); showToast('Logget ut.'); }
-async function onSaveProfile(e){ e.preventDefault(); if(!state.session?.user){ showToast('Du må være logget inn.'); return; } const name=el.playerName.value.trim(), gender=el.playerGender.value; if(!name||!gender){ showToast('Fyll ut navn og kjønn.'); return; } const { error }=await supabaseClient.from('players').upsert({ user_id:state.session.user.id,email:state.session.user.email,name,gender },{ onConflict:'user_id' }); if(error){ showToast('Lagring feilet: '+error.message); return; } await refreshAuth(); showToast('Spillerprofil lagret.'); }
-function computeRoundResult({ player, marker, date, course, tee, format, handicapIndex, grossByHole }){ if(!marker) throw new Error('Markør må fylles ut.'); const teeRecord=getTeeRecord(course,player.gender,tee); if(!teeRecord) throw new Error('Fant ikke teeoppsett for valgt bane, kjønn og teested.'); if(teeRecord.courseRating==null||teeRecord.slope==null) throw new Error('Det mangler course rating eller slope for valgt teeoppsett.'); const holes=getCourseHoles(course); const playingHandicap=computePlayingHandicap(Number(handicapIndex),teeRecord); const monthKey=date.slice(0,7); const playedHoleNumbers=format==='front'?holes.filter(h=>h.hole<=9).map(h=>h.hole):format==='back'?holes.filter(h=>h.hole>=10).map(h=>h.hole):holes.map(h=>h.hole); const pars=getFrontBackPars(course); let grossPlayed=0, adjustedGrossPlayed=0, netPlayed=0; const holeBreakdown=holes.map(hole=>{ const played=playedHoleNumbers.includes(hole.hole); const grossInput=played?Number(grossByHole[hole.hole]??0):null; const strokes=strokesReceivedOnHole(playingHandicap,hole.index); const maxGrossAllowed=hole.par+2+strokes; let adjustedGross=null,net=null; if(played){ if(!grossInput||grossInput<1) throw new Error(`Mangler slag på hull ${hole.hole}.`); adjustedGross=Math.min(grossInput,maxGrossAllowed); net=adjustedGross-strokes; grossPlayed+=grossInput; adjustedGrossPlayed+=adjustedGross; netPlayed+=net; } return { hole:hole.hole,par:hole.par,index:hole.index,strokesReceived:strokes,grossInput,adjustedGross,net,played }; }); let netTotal=netPlayed; if(format==='front') netTotal+=pars.back; if(format==='back') netTotal+=pars.front; return { user_id:player.user_id,player_id:player.id,player_name:player.name,gender:player.gender,marker,date,month_key:monthKey,course,tee,format,handicap_index:Number(handicapIndex),playing_handicap:playingHandicap,course_rating:teeRecord.courseRating,slope:teeRecord.slope,course_par:teeRecord.coursePar,gross_total:grossPlayed,adjusted_gross_played:adjustedGrossPlayed,net_total:netTotal,score_relative:netTotal-teeRecord.coursePar,hole_breakdown:holeBreakdown }; }
-async function onAddRound(e){ e.preventDefault(); if(!state.profile){ showToast('Du må være logget inn og ha spillerprofil.'); return; } try{ const grossByHole={}; const holes=getCourseHoles(el.roundCourse.value); const played=el.roundFormat.value==='front'?holes.filter(h=>h.hole<=9).map(h=>h.hole):el.roundFormat.value==='back'?holes.filter(h=>h.hole>=10).map(h=>h.hole):holes.map(h=>h.hole); for(const holeNo of played){ grossByHole[holeNo]=Number(document.getElementById(`gross_hole_${holeNo}`).value); } const round=computeRoundResult({ player:state.profile, marker:el.roundMarker.value.trim(), date:el.roundDate.value, course:el.roundCourse.value, tee:el.roundTee.value, format:el.roundFormat.value, handicapIndex:Number(el.roundHcp.value), grossByHole }); const { error }=await supabaseClient.from('rounds').insert(round); if(error){ showToast('Lagring feilet: '+error.message); return; } el.roundStatus.textContent='Runde registrert.'; showToast('Runde registrert.'); } catch(err){ showToast(err.message||'Kunne ikke registrere runde.'); }}
-function showToast(message){ el.toast.textContent=message; el.toast.classList.add('show'); clearTimeout(showToast._timer); showToast._timer=setTimeout(()=>el.toast.classList.remove('show'),2200); }
+const el={
+  authForm:document.getElementById('authForm'),
+  authEmail:document.getElementById('authEmail'),
+  authPassword:document.getElementById('authPassword'),
+  signupBtn:document.getElementById('signupBtn'),
+  logoutBtn:document.getElementById('logoutBtn'),
+  authStatus:document.getElementById('authStatus'),
+  profileForm:document.getElementById('profileForm'),
+  playerName:document.getElementById('playerName'),
+  playerGender:document.getElementById('playerGender'),
+  profileStatus:document.getElementById('profileStatus'),
+  privateLocked:document.getElementById('privateLocked'),
+  roundForm:document.getElementById('roundForm'),
+  roundPlayerText:document.getElementById('roundPlayerText'),
+  roundMarker:document.getElementById('roundMarker'),
+  roundDate:document.getElementById('roundDate'),
+  roundMonth:document.getElementById('roundMonth'),
+  roundCourse:document.getElementById('roundCourse'),
+  roundTee:document.getElementById('roundTee'),
+  roundFormat:document.getElementById('roundFormat'),
+  roundHcp:document.getElementById('roundHcp'),
+  teeInfoBox:document.getElementById('teeInfoBox'),
+  holeInputs:document.getElementById('holeInputs'),
+  roundStatus:document.getElementById('roundStatus'),
+  toast:document.getElementById('toast')};
+  
+function bindEvents(){ 
+  el.authForm.addEventListener('submit',onLogin); 
+  el.signupBtn.addEventListener('click',onSignup); 
+  el.logoutBtn.addEventListener('click',onLogout); 
+  el.profileForm.addEventListener('submit',onSaveProfile); 
+  el.roundForm.addEventListener('submit',onAddRound); 
+  el.roundDate.addEventListener('change',syncRoundMonth); 
+  el.roundCourse.addEventListener('change',onRoundCourseChange); 
+  el.roundTee.addEventListener('change',updateTeeInfoBox); 
+  el.roundHcp.addEventListener('input',updateTeeInfoBox); 
+  el.roundFormat.addEventListener('change',updateHoleInputsVisibility);
+} 
+  bindEvents();
+  
+function setToday(){ 
+  el.roundDate.value=new Date().toISOString().slice(0,10); 
+  syncRoundMonth(); } setToday();
+  
+function populateCourseSelect(){ 
+  el.roundCourse.innerHTML=''; 
+  COURSE_ORDER.forEach(course=>{ const opt=document.createElement('option'); 
+                                opt.value=course; opt.textContent=course; el.roundCourse.appendChild(opt); 
+                               }
+                      ); 
+  onRoundCourseChange(); } populateCourseSelect();
+  
+function formatMonthKey(key){ 
+  const [y,m]=key.split('-'); 
+  return MONTH_NAMES[Number(m)-1]+' '+y; 
+} 
+  
+  function syncRoundMonth(){ 
+    el.roundMonth.value=el.roundDate.value?formatMonthKey(el.roundDate.value.slice(0,7)):''; 
+  }
+  
+function getTeeRecord(course,gender,tee){ 
+  return teeData.find(t=>t.course===course&&t.gender===gender&&String(t.tee)===String(tee))||null; 
+} 
+  
+function getCourseHoles(course){ 
+  return holeData.filter(h=>h.course===course).sort((a,b)=>a.hole-b.hole); 
+}
+  
+function onRoundCourseChange(){ 
+  const course=el.roundCourse.value; 
+  const gender=state.profile?.gender||el.playerGender.value||'Mann'; 
+  const options=teeData.filter(t=>t.course===course&&t.gender===gender); 
+  el.roundTee.innerHTML=options.length?options.map(t=>`<option value="${
+    String(t.tee)
+  }
+  ">$
+    {t.tee}</option>`).join(''):'<option value="">Ingen teevalg tilgjengelig</option>'; 
+  renderHoleInputs(); updateHoleInputsVisibility(); updateTeeInfoBox(); 
+}
+  
+function renderHoleInputs(){ 
+  const holes=getCourseHoles(el.roundCourse.value); 
+  el.holeInputs.innerHTML=holes.map(h=>`<div class="hole"><strong>Hull ${h.hole}</strong>
+  <div class="muted">Par ${h.par} • Index ${h.index}</div>
+  <label for="gross_hole_${h.hole}">Slag</label>
+  <input type="number" id="gross_hole_${h.hole}" min="1" step="1" placeholder="0">
+  </div>`).join(''); 
+}
+  
+function updateHoleInputsVisibility(){ 
+  const format=el.roundFormat.value; 
+  document.querySelectorAll('.hole').forEach(card=>{ 
+    const hole=Number(card.querySelector('strong').textContent.replace('Hull ','')); 
+    const show=format==='full'||(format==='front'&&hole<=9)||(format==='back'&&hole>=10); 
+    card.classList.toggle('hidden',!show); const input=card.querySelector('input'); 
+    input.required=show; if(!show) input.value=''; 
+  });
+}
+  
+function computePlayingHandicap(exactHcp,teeRecord){ 
+  return Math.round(exactHcp*(teeRecord.slope/113)+(teeRecord.courseRating-teeRecord.coursePar)); 
+}
+  
+function updateTeeInfoBox(){ 
+  const tee=getTeeRecord(el.roundCourse.value,state.profile?.gender||el.playerGender.value,el.roundTee.value); 
+  const hcp=Number(el.roundHcp.value); if(!tee){ el.teeInfoBox.textContent='Fant ikke teeoppsett for valgt spiller, bane og teested.'; 
+  return; 
+  } 
+if(tee.courseRating==null||tee.slope==null){ 
+  el.teeInfoBox.textContent='Valgt tee mangler Course Rating eller Slope.'; return; 
+} 
+  
+const phcp=Number.isFinite(hcp)?computePlayingHandicap(hcp,tee):'—'; 
+  el.teeInfoBox.textContent=`${tee.course} • ${tee.gender} • Tee ${tee.tee} • CR ${tee.courseRating} • Slope ${tee.slope} • Par ${tee.coursePar} • PHCP ${phcp}`; 
+}
+  
+function getFrontBackPars(course){ 
+  const holes=getCourseHoles(course); 
+  const front=holes.filter(h=>h.hole<=9).reduce((s,h)=>s+h.par,0); 
+  const back=holes.filter(h=>h.hole>=10).reduce((s,h)=>s+h.par,0); 
+  return { front,back,total:front+back 
+         }; 
+}
+  
+function strokesReceivedOnHole(playingHandicap,holeIndex){ 
+  return Math.max(0,1+Math.floor((playingHandicap-holeIndex)/18)); 
+}
+  
+async function refreshAuth(){ 
+  const { data }=await supabaseClient.auth.getSession(); 
+  state.session=data.session||null; if(!state.session?.user){ 
+    state.profile=null; el.authStatus.textContent='Ikke innlogget'; el.profileStatus.textContent='Ingen profil lastet.'; 
+    el.privateLocked.classList.remove('hidden'); el.roundForm.classList.add('hidden'); 
+    return; 
+  } 
+  
+el.authStatus.textContent=`Innlogget som ${state.session.user.email}`; 
+  const { data:profile }=await supabaseClient.from('players').select('*').eq('user_id',state.session.user.id).maybeSingle(); state.profile=profile||null; 
+  if(state.profile){ el.playerName.value=state.profile.name||''; 
+                    el.playerGender.value=state.profile.gender||''; 
+                    el.profileStatus.textContent=`Profil lastet: ${state.profile.name} (${state.profile.gender})`; 
+                    el.privateLocked.classList.add('hidden'); el.roundForm.classList.remove('hidden'); 
+                    el.roundPlayerText.value=state.profile.name; 
+                    onRoundCourseChange(); 
+                   } 
+}
+  
+async function onLogin(e){ e.preventDefault(); 
+                          const { error }=await supabaseClient.auth.signInWithPassword({ 
+                            email:el.authEmail.value.trim(), password:el.authPassword.value }); 
+                          if(error){ showToast('Innlogging feilet: '+error.message); return; 
+                                   } 
+                          await refreshAuth(); 
+                          showToast('Innlogget.'); 
+                    }
+async function onSignup(){ 
+  const { error }=await supabaseClient.auth.signUp({ 
+    email:el.authEmail.value.trim(), password:el.authPassword.value }); 
+  if(error){ showToast('Kunne ikke opprette konto: '+error.message); 
+            return; 
+           } 
+  showToast('Konto opprettet.'); 
+}
+  
+async function onLogout(){ 
+  const { error }=await supabaseClient.auth.signOut(); 
+  if(error){ showToast('Utlogging feilet: '+error.message);
+            return; 
+           } 
+  await refreshAuth(); showToast('Logget ut.'); 
+}
+  
+async function onSaveProfile(e){ 
+  e.preventDefault(); 
+  if(!state.session?.user){ 
+    showToast('Du må være logget inn.'); 
+    return; 
+  } 
+  
+const name=el.playerName.value.trim(), gender=el.playerGender.value; 
+  if(!name||!gender){ showToast('Fyll ut navn og kjønn.'); 
+                     return; 
+                    } 
+
+  const { error }=await supabaseClient.from('players').upsert({ 
+    user_id:state.session.user.id,email:state.session.user.email,name,gender },{ onConflict:'user_id' }); 
+  if(error){ showToast('Lagring feilet: '+error.message); 
+            return; 
+           } 
+  await refreshAuth(); 
+  showToast('Spillerprofil lagret.'); 
+}
+  
+function computeRoundResult({ 
+  player, marker, date, course, tee, format, handicapIndex, grossByHole 
+})
+{ 
+  if(!marker) throw new Error('Markør må fylles ut.'); 
+  const teeRecord=getTeeRecord(course,player.gender,tee); 
+  if(!teeRecord) throw new Error('Fant ikke teeoppsett for valgt bane, kjønn og teested.'); 
+  if(teeRecord.courseRating==null||teeRecord.slope==null) throw new Error('Det mangler course rating eller slope for valgt teeoppsett.'); 
+  const holes=getCourseHoles(course); 
+  const playingHandicap=computePlayingHandicap(Number(handicapIndex),teeRecord); 
+  const monthKey=date.slice(0,7); 
+  const playedHoleNumbers=format==='front'?holes.filter(h=>h.hole<=9).map(h=>h.hole):format==='back'?holes.filter(h=>h.hole>=10).map(h=>h.hole):holes.map(h=>h.hole); 
+  const pars=getFrontBackPars(course); let grossPlayed=0, adjustedGrossPlayed=0, netPlayed=0; 
+  const holeBreakdown=holes.map(hole=>{ const played=playedHoleNumbers.includes(hole.hole); 
+  const grossInput=played?Number(grossByHole[hole.hole]??0):null; 
+  const strokes=strokesReceivedOnHole(playingHandicap,hole.index); 
+  const maxGrossAllowed=hole.par+2+strokes; 
+        let adjustedGross=null,net=null; 
+        if(played){ 
+          if(!grossInput||grossInput<1) throw new Error(`Mangler slag på hull ${hole.hole}.`); 
+          adjustedGross=Math.min(grossInput,maxGrossAllowed); net=adjustedGross-strokes; 
+          grossPlayed+=grossInput; adjustedGrossPlayed+=adjustedGross; netPlayed+=net; 
+        } 
+          return { 
+            hole:hole.hole,par:hole.par,index:hole.index,strokesReceived:strokes,grossInput,adjustedGross,net,played 
+          }; 
+      }); 
+
+let netTotal=netPlayed; 
+  if(format==='front') netTotal+=pars.back; 
+  if(format==='back') netTotal+=pars.front; 
+  return { 
+    user_id:player.user_id,player_id:player.id,player_name:player.name,gender:player.gender,marker,date,month_key:monthKey,course,tee,format,handicap_index:Number(handicapIndex),playing_handicap:playingHandicap,course_rating:teeRecord.courseRating,slope:teeRecord.slope,course_par:teeRecord.coursePar,gross_total:grossPlayed,adjusted_gross_played:adjustedGrossPlayed,net_total:netTotal,score_relative:netTotal-teeRecord.coursePar,hole_breakdown:holeBreakdown 
+  }; 
+}
+  
+async function onAddRound(e){ 
+  e.preventDefault(); 
+  if(!state.profile){ 
+    showToast('Du må være logget inn og ha spillerprofil.'); 
+    return; 
+  } 
+  try{ 
+    const grossByHole={}; 
+    const holes=getCourseHoles(el.roundCourse.value); 
+    const played=el.roundFormat.value==='front'?holes.filter(h=>h.hole<=9).map(h=>h.hole):el.roundFormat.value==='back'?holes.filter(h=>h.hole>=10).map(h=>h.hole):holes.map(h=>h.hole); 
+    for(const holeNo of played){ grossByHole[holeNo]=Number(document.getElementById(`gross_hole_${holeNo}`).value); 
+            } 
+    const round=computeRoundResult({ 
+      player:state.profile, 
+      marker:el.roundMarker.value.trim(), 
+      date:el.roundDate.value, 
+      course:el.roundCourse.value, 
+      tee:el.roundTee.value, 
+      format:el.roundFormat.value, 
+      handicapIndex:Number(el.roundHcp.value), 
+      grossByHole 
+    }); 
+    const { error }=await supabaseClient.from('rounds').insert(round); 
+    if(error){ showToast('Lagring feilet: '+error.message); 
+              return; } el.roundStatus.textContent='Runde registrert.'; showToast('Runde registrert.'); 
+  } 
+  catch(err){ 
+    showToast(err.message||'Kunne ikke registrere runde.'); 
+  }
+}
+  
+function showToast(message){ 
+  el.toast.textContent=message; 
+  el.toast.classList.add('show'); 
+  clearTimeout(showToast._timer); 
+  showToast._timer=setTimeout(()=>el.toast.classList.remove('show'),2200); 
+}
+  
 refreshAuth();
 </script>
 </body>
