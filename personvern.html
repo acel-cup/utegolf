@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Personvern | ACEL CUP</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    :root{
+      --nav:#163949;
+      --nav2:#224b5d;
+      --green:#173f31;
+      --gold:#c7a35b;
+      --paper:#f3efe6;
+      --paper2:#fbf8f1;
+      --line:#d8c8a3;
+      --ink:#24342d;
+      --muted:#6d6a62;
+      --shadow:0 14px 30px rgba(33,33,24,.12);
+    }
 
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.32), rgba(255,255,255,0) 24%),
+        var(--paper);
+      color:var(--ink);
+    }
+
+    nav.container-fluid{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:linear-gradient(180deg,var(--nav2),var(--nav));
+      border-bottom:3px solid var(--gold);
+      padding:.65rem 1.5rem;
+      box-shadow:0 4px 18px rgba(0,0,0,.12);
+    }
+
+    .font-normal{font-weight:normal}
+
+    nav strong{
+      font-family:Impact,"Arial Narrow",Arial,sans-serif;
+      font-size:2.05rem;
+      letter-spacing:.02em;
+      font-weight:700;
+    }
+
+    nav a{
+      color:#f6f2e8 !important;
+      font-weight:700;
+      text-decoration:none;
+    }
+
+    nav [role=button]{
+      background:transparent;
+      border:1px solid rgba(255,255,255,.34);
+      color:#f6f2e8;
+      padding:.45rem .95rem;
+      border-radius:2px;
+    }
+
+    main.container{
+      max-width:1100px;
+      padding:2rem 1rem 3rem;
+    }
+
+    .page-card{
+      background:linear-gradient(180deg,#fcfaf4,#f2eadb);
+      border:1px solid var(--line);
+      border-radius:10px;
+      box-shadow:var(--shadow);
+      padding:2rem;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .page-card::before{
+      content:"";
+      position:absolute;
+      inset:14px;
+      border:1px solid rgba(199,163,91,.2);
+      border-radius:8px;
+      pointer-events:none;
+    }
+
+    .page-title{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:2.4rem;
+      color:#173f31;
+      margin:0 0 .75rem;
+    }
+
+    .page-rule{
+      height:1px;
+      background:rgba(199,163,91,.38);
+      margin:0 0 1.25rem;
+    }
+
+    .notice{
+      background:#fffdf8;
+      border:1px solid rgba(199,163,91,.35);
+      border-radius:10px;
+      padding:1.2rem 1.25rem;
+      font-size:1.1rem;
+      line-height:1.7;
+    }
+
+    .footer-band{
+      margin-top:18px;
+      background:linear-gradient(180deg,#234c3d,#17384a);
+      color:#f2ede1;
+      border-top:2px solid var(--gold);
+      padding:18px 16px;
+      text-align:center;
+    }
+
+    .footer-band a{
+      color:#f2ede1;
+      text-decoration:none;
+      margin:0 10px;
+      font-weight:600;
+    }
+  </style>
+</head>
+<body>
+  <nav class="container-fluid">
+    <ul>
+      <li>
+        <strong class="font-normal">
+          <span style="color:#E30613">ACEL</span>
+          <span style="color:#020A3A">CUP</span>
+        </strong>
+      </li>
+    </ul>
+    <ul>
+      <li><a href="index.html">Leaderboard</a></li>
+      <li><a href="register.html">Registrer Runde</a></li>
+      <li><a href="admin.html">Admin Panel</a></li>
+      <li><a href="register.html#auth" role="button">Logg inn</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <article class="page-card">
+      <h1 class="page-title">Personvern</h1>
+      <div class="page-rule"></div>
+
+      <div class="notice">
+        Denne turneringen opererer ikke med personvern.
+      </div>
+    </article>
+  </main>
+
+  <div class="footer-band">
+    <a href="regler.html">Regler</a> |
+    <a href="kontakt.html">Kontakt</a> |
+    <a href="personvern.html">Personvern</a>
+  </div>
+</body>
+</html>
