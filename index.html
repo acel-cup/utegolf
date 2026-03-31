@@ -40,7 +40,7 @@
     }
 
     body{
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
     }
 
     nav.container-fluid{
@@ -102,30 +102,22 @@
 
     .layout{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:1.08fr 1fr;
       gap:18px;
       align-items:start;
     }
 
-    /* Månedsvinner */
-    .cream-card{
+    .panel-card{
       position:relative;
       background:linear-gradient(180deg,#fcfaf4,#f1e9da);
       border:1px solid var(--line);
       border-radius:8px;
       box-shadow:var(--shadow);
       overflow:hidden;
-      min-height:372px;
-      display:grid;
-      grid-template-columns:58% 42%;
-      grid-template-rows:auto 1fr 118px;
-      grid-template-areas:
-        "left trophy"
-        "left trophy"
-        "strip strip";
+      min-height:420px;
     }
 
-    .cream-card::before{
+    .panel-card::before{
       content:"";
       position:absolute;
       inset:14px;
@@ -134,9 +126,8 @@
       pointer-events:none;
     }
 
-    .card-left{
-      grid-area:left;
-      padding:22px 18px 16px 24px;
+    .panel-inner{
+      padding:22px 22px 20px;
       position:relative;
       z-index:1;
     }
@@ -146,85 +137,113 @@
       font-size:2.05rem;
       line-height:1.08;
       color:#183b30;
-      margin:0 0 8px;
+      margin:0;
       font-weight:700;
     }
 
-    .panel-title::after{
-      content:"";
-      display:block;
+    .panel-title-rule{
       width:100%;
-      max-width:325px;
       height:1px;
       background:rgba(199,163,91,.36);
-      margin-top:14px;
-      margin-bottom:18px;
+      margin:14px 0 14px;
     }
 
-    .month-tabs{
-      display:none;
-    }
-
-    .winner-copy .month{
-      font-family:Georgia,"Times New Roman",serif;
-      font-size:1.2rem;
-      color:#27453a;
-      margin-bottom:.45rem;
-      font-weight:700;
-    }
-
-    .fine-rule{
-      height:1px;
-      max-width:320px;
-      background:rgba(199,163,91,.38);
-      margin:10px 0 16px;
-    }
-
-    .winner-copy .name{
-      font-family:Georgia,"Times New Roman",serif;
-      font-size:2.05rem;
-      line-height:1.14;
-      font-weight:700;
-      color:#173d2f;
-      margin:.2rem 0 .45rem;
-    }
-
-    .winner-copy .score{
-      font-size:1.1rem;
-      color:var(--ink);
-    }
-
-    .winner-copy .muted{
+    .panel-subtitle{
       font-size:1rem;
+      color:#5f615b;
+      margin:0 0 18px;
+      max-width:48rem;
+    }
+
+    .month-chip{
+      display:inline-block;
+      margin-bottom:14px;
+      padding:.35rem .75rem;
+      background:#efe5d1;
+      border:1px solid rgba(199,163,91,.38);
+      border-radius:999px;
+      color:#27453a;
+      font-weight:700;
+      font-size:.95rem;
+    }
+
+    .monthly-board-shell{
+      background:rgba(255,255,255,.46);
+      border:1px solid rgba(199,163,91,.3);
+      border-radius:8px;
+      overflow:hidden;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.45);
+    }
+
+    .monthly-board-table{
+      width:100%;
+      border-collapse:collapse;
+      font-variant-numeric:tabular-nums;
+      margin:0;
+    }
+
+    .monthly-board-table thead th{
+      background:linear-gradient(180deg,#1f5d47,#184434);
+      color:#f8f4ea;
+      padding:.85rem .85rem;
+      border:1px solid rgba(255,255,255,.08);
+      font-weight:700;
+      text-align:left;
+      white-space:nowrap;
+      font-size:.96rem;
+    }
+
+    .monthly-board-table tbody td{
+      padding:.88rem .85rem;
+      border:1px solid #d8cdb7;
+      background:#fbf8f1;
+      color:#22342e;
+      vertical-align:middle;
+    }
+
+    .monthly-board-table tbody tr:nth-child(even) td{
+      background:#f4eee0;
+    }
+
+    .monthly-board-table .pos{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.45rem;
+      line-height:1;
+      font-weight:700;
+      color:#173f31;
+      width:72px;
+      white-space:nowrap;
+    }
+
+    .player-name{
+      font-weight:700;
+      color:#18392e;
+    }
+
+    .course-cell{
+      color:#4c584f;
+    }
+
+    .score-badge{
+      display:inline-block;
+      min-width:54px;
+      text-align:center;
+      padding:.3rem .65rem;
+      border-radius:999px;
+      font-weight:800;
+      background:#f4ecdb;
+      border:1px solid rgba(199,163,91,.38);
+    }
+
+    .under{color:#216b49}
+    .over{color:var(--red)}
+    .even{color:#8c6d31}
+
+    .monthly-empty{
+      padding:1rem 0;
       color:var(--muted);
     }
 
-    .trophy-art{
-      grid-area:trophy;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:4px 10px 0 0;
-      font-size:175px;
-      line-height:1;
-      filter:drop-shadow(0 10px 18px rgba(0,0,0,.22));
-      position:relative;
-      z-index:1;
-      background:
-        radial-gradient(circle at 50% 32%, rgba(255,255,255,.50), transparent 45%),
-        transparent;
-    }
-
-    .land-strip{
-      grid-area:strip;
-      height:118px;
-      border-top:1px solid var(--line);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.06)),
-        url('https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=1600&q=80') center/cover;
-    }
-
-    /* Leaderboard */
     .board-wrap{
       display:flex;
       flex-direction:column;
@@ -315,17 +334,11 @@
       white-space:nowrap;
     }
 
-    .under{color:#216b49;font-weight:700}
-    .over{color:var(--red);font-weight:700}
-    .even{color:#8c6d31;font-weight:700}
-    .muted{color:var(--muted)}
-
     .board-base{
       width:88%;
       height:56px;
       margin:0 auto;
-      background:
-        linear-gradient(180deg,#1f5a45,#164533);
+      background:linear-gradient(180deg,#1f5a45,#164533);
       border-left:4px solid #255645;
       border-right:4px solid #255645;
       border-bottom:4px solid #255645;
@@ -341,7 +354,108 @@
       background:rgba(199,163,91,.25);
     }
 
-    /* Nedre seksjoner */
+    .section-card{
+      margin-top:18px;
+      background:linear-gradient(180deg,#fcfaf4,#f3ecde);
+      border:1px solid var(--line);
+      border-radius:8px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .section-card::before{
+      content:"";
+      position:absolute;
+      inset:14px;
+      border:1px solid rgba(199,163,91,.16);
+      border-radius:6px;
+      pointer-events:none;
+    }
+
+    .section-inner{
+      padding:22px;
+      position:relative;
+      z-index:1;
+    }
+
+    .section-title{
+      font-family:Georgia,"Times New Roman",serif;
+      color:#183b30;
+      margin:0;
+      font-size:1.95rem;
+      line-height:1.08;
+    }
+
+    .section-rule{
+      width:100%;
+      height:1px;
+      background:rgba(199,163,91,.34);
+      margin:14px 0 16px;
+    }
+
+    .winners-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .winner-card{
+      background:linear-gradient(180deg,#fffdf8,#f5efe1);
+      border:1px solid rgba(199,163,91,.36);
+      border-radius:10px;
+      padding:16px 16px 14px;
+      box-shadow:0 10px 22px rgba(34,35,23,.08);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .winner-card::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      height:6px;
+      background:linear-gradient(90deg,#c7a35b,#e3d1a2,#c7a35b);
+      opacity:.9;
+    }
+
+    .winner-month{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.2rem;
+      font-weight:700;
+      color:#1c4234;
+      margin-bottom:10px;
+    }
+
+    .winner-name{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.55rem;
+      font-weight:700;
+      line-height:1.15;
+      color:#173d2f;
+      margin:0 0 .45rem;
+    }
+
+    .winner-meta{
+      color:#4f5a52;
+      font-size:.98rem;
+      margin:.22rem 0;
+    }
+
+    .winner-rank{
+      display:inline-block;
+      padding:.22rem .6rem;
+      border-radius:999px;
+      background:#efe4cb;
+      border:1px solid rgba(199,163,91,.4);
+      color:#6c5324;
+      font-weight:800;
+      font-size:.82rem;
+      margin-bottom:10px;
+    }
+
     .triple{
       display:grid;
       grid-template-columns:1fr 1fr 1fr;
@@ -399,6 +513,14 @@
       font-weight:600;
     }
 
+    .muted{color:var(--muted)}
+
+    @media (max-width:1280px){
+      .winners-grid{
+        grid-template-columns:repeat(3, minmax(0,1fr));
+      }
+    }
+
     @media (max-width:1180px){
       .layout,
       .triple{
@@ -409,23 +531,12 @@
         aspect-ratio:16/8.2;
       }
 
-      .cream-card{
-        grid-template-columns:1fr;
-        grid-template-rows:auto auto 110px;
-        grid-template-areas:
-          "left"
-          "trophy"
-          "strip";
-        min-height:auto;
-      }
-
-      .trophy-art{
-        padding:0 0 10px;
-        font-size:128px;
-      }
-
       .board-base{
         width:80%;
+      }
+
+      .winners-grid{
+        grid-template-columns:repeat(2, minmax(0,1fr));
       }
     }
 
@@ -443,12 +554,13 @@
       }
 
       .panel-title,
-      .board-title{
-        font-size:1.6rem;
+      .board-title,
+      .section-title{
+        font-size:1.55rem;
       }
 
-      .winner-copy .name{
-        font-size:1.7rem;
+      .monthly-board-table .pos{
+        font-size:1.1rem;
       }
 
       .pos{
@@ -457,6 +569,10 @@
 
       .masters-table tbody tr td:last-child{
         font-size:1.35rem;
+      }
+
+      .winners-grid{
+        grid-template-columns:1fr;
       }
     }
   </style>
@@ -486,14 +602,35 @@
 
     <div class="content-wrap">
       <div class="layout">
-        <article class="cream-card">
-          <div class="card-left">
-            <h3 class="panel-title">Månedsvinner</h3>
-            <div class="month-tabs" id="monthTabs"></div>
-            <div class="winner-copy" id="monthWinnerCard"></div>
+        <article class="panel-card">
+          <div class="panel-inner">
+            <h3 class="panel-title">Leaderboard måned</h3>
+            <div class="panel-title-rule"></div>
+            <p class="panel-subtitle">
+              Her vises alle spillere med registrerte runder i inneværende måned. Tabellen viser hver spillers beste runde denne måneden, med netto score og bane.
+            </p>
+            <div class="month-chip" id="currentMonthLabel">Inneværende måned</div>
+
+            <div class="monthly-board-shell">
+              <div style="overflow:auto;">
+                <table class="monthly-board-table" id="monthlyLeaderboardTable">
+                  <thead>
+                    <tr>
+                      <th>Pos</th>
+                      <th>Spiller</th>
+                      <th>Netto</th>
+                      <th>Bane</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="monthlyLeaderboardEmpty" class="monthly-empty" style="display:none;">
+              Ingen registrerte runder i inneværende måned.
+            </div>
           </div>
-          <div class="trophy-art">🏆</div>
-          <div class="land-strip"></div>
         </article>
 
         <div class="board-wrap">
@@ -518,6 +655,14 @@
           <div class="board-base" aria-hidden="true"></div>
         </div>
       </div>
+
+      <section class="section-card" aria-labelledby="pastWinnersTitle">
+        <div class="section-inner">
+          <h3 class="section-title" id="pastWinnersTitle">Månedsvinnere</h3>
+          <div class="section-rule"></div>
+          <div id="pastWinnersGrid" class="winners-grid"></div>
+        </div>
+      </section>
 
       <div class="triple">
         <article class="feature">
@@ -566,12 +711,12 @@
     const MONTH_NAMES = ['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
     const POINTS_BY_RANK = {1:500,2:400,3:350,4:300,5:250,6:200,7:150,8:100,9:50,10:50};
 
-    let selectedMonth = currentMonthKey();
-
     const el = {
-      monthTabs: document.getElementById('monthTabs'),
-      monthWinnerCard: document.getElementById('monthWinnerCard'),
+      currentMonthLabel: document.getElementById('currentMonthLabel'),
+      monthlyLeaderboardTableBody: document.querySelector('#monthlyLeaderboardTable tbody'),
+      monthlyLeaderboardEmpty: document.getElementById('monthlyLeaderboardEmpty'),
       seasonTableBody: document.querySelector('#seasonTable tbody'),
+      pastWinnersGrid: document.getElementById('pastWinnersGrid'),
       acesList: document.getElementById('acesList'),
       bestHolesTableBody: document.querySelector('#bestHolesTable tbody'),
       birdieLeaders: document.getElementById('birdieLeaders')
@@ -579,16 +724,16 @@
 
     function currentMonthKey(){
       const d = new Date();
-      return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
     }
 
     function formatMonthKey(key){
-      const [y,m] = key.split('-');
-      return MONTH_NAMES[Number(m)-1] + ' ' + y;
+      const [y, m] = key.split('-');
+      return MONTH_NAMES[Number(m) - 1] + ' ' + y;
     }
 
     function formatDate(dateStr){
-      const [y,m,d] = dateStr.split('-');
+      const [y, m, d] = dateStr.split('-');
       return `${d}.${m}.${y}`;
     }
 
@@ -604,6 +749,11 @@
           : `<span class="even">E</span>`;
     }
 
+    function scoreBadgeHtml(value){
+      const cls = value < 0 ? 'under' : value > 0 ? 'over' : 'even';
+      return `<span class="score-badge ${cls}">${scoreText(value)}</span>`;
+    }
+
     function ordinalText(rank){
       return `${rank}.`;
     }
@@ -616,10 +766,12 @@
       return list.map(item => {
         seen += 1;
         const score = scoreAccessor(item);
+
         if(prevScore === null || score !== prevScore){
           rank = seen;
           prevScore = score;
         }
+
         return { ...item, rank };
       });
     }
@@ -635,7 +787,7 @@
           a.score_relative - b.score_relative ||
           a.net_total - b.net_total ||
           a.date.localeCompare(b.date) ||
-          a.player_name.localeCompare(b.player_name,'no')
+          a.player_name.localeCompare(b.player_name, 'no')
         );
 
       return applyCompetitionRanking(filtered, item => item.score_relative);
@@ -668,7 +820,7 @@
           a.score_relative - b.score_relative ||
           a.net_total - b.net_total ||
           a.date.localeCompare(b.date) ||
-          a.player_name.localeCompare(b.player_name,'no')
+          a.player_name.localeCompare(b.player_name, 'no')
         );
 
       return applyCompetitionRanking(bestRounds, item => item.score_relative)
@@ -702,7 +854,7 @@
       const rows = [...byPlayer.values()].sort((a,b) =>
         b.points - a.points ||
         (a.bestScore ?? 999) - (b.bestScore ?? 999) ||
-        a.player_name.localeCompare(b.player_name,'no')
+        a.player_name.localeCompare(b.player_name, 'no')
       );
 
       let rank = 0;
@@ -717,6 +869,91 @@
         }
         return { ...row, rank };
       });
+    }
+
+    function getBestRoundsPerPlayerForMonth(rounds, monthKey){
+      const filtered = rounds.filter(r => r.month_key === monthKey);
+      const bestByPlayer = new Map();
+
+      for(const round of filtered){
+        const current = bestByPlayer.get(round.player_id);
+
+        if(
+          !current ||
+          round.score_relative < current.score_relative ||
+          (round.score_relative === current.score_relative && round.net_total < current.net_total) ||
+          (round.score_relative === current.score_relative && round.net_total === current.net_total && round.date < current.date)
+        ){
+          bestByPlayer.set(round.player_id, round);
+        }
+      }
+
+      const rows = [...bestByPlayer.values()].sort((a,b) =>
+        a.score_relative - b.score_relative ||
+        a.net_total - b.net_total ||
+        a.date.localeCompare(b.date) ||
+        a.player_name.localeCompare(b.player_name, 'no')
+      );
+
+      return applyCompetitionRanking(rows, item => item.score_relative);
+    }
+
+    function getPastMonthlyWinners(rounds){
+      const currentKey = currentMonthKey();
+      const monthKeys = [...new Set(rounds.map(r => r.month_key))]
+        .filter(Boolean)
+        .sort((a,b) => b.localeCompare(a));
+
+      const pastKeys = monthKeys.filter(key => key < currentKey);
+
+      return pastKeys.map(key => {
+        const ranking = getMonthlyRanking(rounds, key);
+        const winner = ranking[0] || null;
+        return { key, winner };
+      }).filter(item => item.winner);
+    }
+
+    function renderCurrentMonthLeaderboard(rounds){
+      const key = currentMonthKey();
+      const rows = getBestRoundsPerPlayerForMonth(rounds, key);
+
+      el.currentMonthLabel.textContent = formatMonthKey(key);
+
+      if(!rows.length){
+        el.monthlyLeaderboardTableBody.innerHTML = '';
+        el.monthlyLeaderboardEmpty.style.display = 'block';
+        return;
+      }
+
+      el.monthlyLeaderboardEmpty.style.display = 'none';
+      el.monthlyLeaderboardTableBody.innerHTML = rows.map(row => `
+        <tr>
+          <td class="pos">${ordinalText(row.rank)}</td>
+          <td class="player-name">${row.player_name}</td>
+          <td>${scoreBadgeHtml(row.score_relative)}</td>
+          <td class="course-cell">${row.course}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderPastMonthlyWinners(rounds){
+      const winners = getPastMonthlyWinners(rounds);
+
+      if(!winners.length){
+        el.pastWinnersGrid.innerHTML = `<div class="muted">Ingen avsluttede måneder med registrerte vinnere ennå.</div>`;
+        return;
+      }
+
+      el.pastWinnersGrid.innerHTML = winners.map(item => `
+        <article class="winner-card">
+          <div class="winner-rank">Månedsvinner</div>
+          <div class="winner-month">${formatMonthKey(item.key)}</div>
+          <div class="winner-name">${item.winner.player_name}</div>
+          <div class="winner-meta"><strong>Netto:</strong> ${scoreText(item.winner.score_relative)}</div>
+          <div class="winner-meta"><strong>Bane:</strong> ${item.winner.course}</div>
+          <div class="winner-meta"><strong>Dato:</strong> ${formatDate(item.winner.date)}</div>
+        </article>
+      `).join('');
     }
 
     function flattenHoleEvents(rounds){
@@ -758,7 +995,7 @@
       el.acesList.innerHTML = aces.length
         ? aces.map((e,i) => `
             <div>
-              <strong>${i+1}. ${e.player_name}</strong>
+              <strong>${i + 1}. ${e.player_name}</strong>
               <div class="muted">${e.course} • Hull ${e.hole} • ${formatDate(e.date)}</div>
             </div>
           `).join('')
@@ -790,64 +1027,19 @@
         .forEach(e => birdieMap.set(e.player_name, (birdieMap.get(e.player_name) || 0) + 1));
 
       const birdieRows = [...birdieMap.entries()]
-        .map(([player_name,count]) => ({player_name,count}))
-        .sort((a,b) => b.count - a.count || a.player_name.localeCompare(b.player_name,'no'))
+        .map(([player_name, count]) => ({ player_name, count }))
+        .sort((a,b) => b.count - a.count || a.player_name.localeCompare(b.player_name, 'no'))
         .slice(0,3);
 
       el.birdieLeaders.innerHTML = birdieRows.length
         ? birdieRows.map((r,i) => `
             <div>
-              <strong>${i+1}. ${r.player_name}</strong>
+              <strong>${i + 1}. ${r.player_name}</strong>
               <div class="rank-big">${r.count}</div>
               <div class="muted">birdies</div>
             </div>
           `).join('')
         : `<div class="muted">Ingen birdies registrert ennå.</div>`;
-    }
-
-    function renderMonthTabs(rounds){
-      const monthKeys = [...new Set(rounds.map(r => r.month_key))].sort();
-      const keys = monthKeys.length ? monthKeys : [currentMonthKey()];
-
-      if(!keys.includes(selectedMonth)){
-        selectedMonth = keys[keys.length - 1];
-      }
-
-      el.monthTabs.innerHTML = '';
-
-      keys.forEach(key => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = formatMonthKey(key);
-        if(key === selectedMonth) button.classList.add('active');
-        button.addEventListener('click', () => {
-          selectedMonth = key;
-          renderMonthlyPanel(rounds);
-        });
-        el.monthTabs.appendChild(button);
-      });
-    }
-
-    function renderMonthlyPanel(rounds){
-      const ranking = getMonthlyRanking(rounds, selectedMonth);
-
-      if(!ranking.length){
-        el.monthWinnerCard.innerHTML = `
-          <div class="month">${formatMonthKey(selectedMonth)}</div>
-          <div class="fine-rule"></div>
-          <div class="muted">Ingen registrerte runder.</div>
-        `;
-        return;
-      }
-
-      const winner = ranking[0];
-
-      el.monthWinnerCard.innerHTML = `
-        <div class="month">${formatMonthKey(selectedMonth)}</div>
-        <div class="fine-rule"></div>
-        <div class="name">1. ${winner.player_name}</div>
-        <div class="score"><strong>Netto:</strong> ${scoreText(winner.score_relative)} ${winner.course}</div>
-      `;
     }
 
     function renderSeasonTable(rounds){
@@ -876,9 +1068,10 @@
       }
 
       const all = rounds || [];
-      renderMonthTabs(all);
-      renderMonthlyPanel(all);
+
+      renderCurrentMonthLeaderboard(all);
       renderSeasonTable(all);
+      renderPastMonthlyWinners(all);
       renderSpecialLists(all);
     }
 
