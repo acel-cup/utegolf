@@ -1031,7 +1031,7 @@
       const winners = getPastMonthlyWinners(rounds);
 
       if(!winners.length){
-        el.pastWinnersGrid.innerHTML = `<div class="muted">Ingen avsluttede måneder med registrerte vinnere ennå.</div>`;
+        el.pastWinnersGrid.innerHTML = `<div class="muted">Ingen avsluttede måneder med registrerte vinnere enda.</div>`;
         return;
       }
 
@@ -1090,7 +1090,7 @@
               <div class="muted">${e.course} • Hull ${e.hole} • ${formatDate(e.date)}</div>
             </div>
           `).join('')
-        : `<div class="muted">Ingen hole in one registrert ennå.</div>`;
+        : `<div class="muted">Ingen hole in one registrert enda.</div>`;
 
       const bestTypes = events
         .filter(e => ['Albatross','Eagle','Birdie'].includes(e.type))
@@ -1110,7 +1110,7 @@
               <td>${formatDate(e.date)}</td>
             </tr>
           `).join('')
-        : `<tr><td colspan="5">Ingen birdies eller bedre registrert ennå.</td></tr>`;
+        : `<tr><td colspan="5">Ingen birdies eller bedre registrert enda.</td></tr>`;
 
       const birdieMap = new Map();
       events
@@ -1130,7 +1130,7 @@
               <div class="muted">birdies</div>
             </div>
           `).join('')
-        : `<div class="muted">Ingen birdies registrert ennå.</div>`;
+        : `<div class="muted">Ingen birdies registrert enda.</div>`;
     }
 
     function renderSeasonTable(rounds){
@@ -1145,7 +1145,7 @@
               <td>${row.bestScore == null ? '—' : scoreHtml(row.bestScore)}</td>
             </tr>
           `).join('')
-        : `<tr><td colspan="4">Ingen sesongdata ennå.</td></tr>`;
+        : `<tr><td colspan="4">Ingen sesongdata enda.</td></tr>`;
     }
 
     function getHoleScoreValue(round, holeNumber){
@@ -1175,7 +1175,7 @@
               <td>${round.net_total ?? '—'}</td>
             </tr>
           `).join('')
-        : `<tr><td colspan="23">Ingen runder registrert ennå.</td></tr>`;
+        : `<tr><td colspan="23">Ingen runder registrert enda.</td></tr>`;
     }
 
     function renderParticipants(players, rounds){
@@ -1193,7 +1193,7 @@
 
       el.participantsGrid.innerHTML = names.length
         ? names.map(name => `<div class="participant-card">${name}</div>`).join('')
-        : `<div class="muted">Ingen påmeldte deltakere ennå.</div>`;
+        : `<div class="muted">Ingen påmeldte deltakere enda.</div>`;
     }
 
     async function init(){
