@@ -713,7 +713,7 @@
       el.playerName.textContent = player.name || 'Spillerprofil';
       el.playerSubtitle.textContent = rounds.length
         ? `${player.gender || 'Spiller'} • ${rounds.length} registrerte runder`
-        : `${player.gender || 'Spiller'} • Ingen registrerte runder ennå`;
+        : `${player.gender || 'Spiller'} • Ingen registrerte runder enda`;
     }
 
     function renderFacts(player, playerRounds, allRounds){
@@ -824,7 +824,7 @@
               <td>${row.points}</td>
             </tr>
           `).join('')
-        : `<tr><td colspan="6">Ingen poenggivende runder ennå.</td></tr>`;
+        : `<tr><td colspan="6">Ingen poenggivende runder enda.</td></tr>`;
     }
 
     function renderAllRounds(playerRounds){
@@ -846,7 +846,7 @@
               <td>${scoreHtml(round.score_relative ?? 0)}</td>
             </tr>
           `).join('')
-        : `<tr><td colspan="25">Ingen registrerte runder ennå.</td></tr>`;
+        : `<tr><td colspan="25">Ingen registrerte runder enda.</td></tr>`;
     }
 
     function renderError(message){
