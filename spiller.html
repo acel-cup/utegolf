@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spillerprofil | ACEL CUP</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "w4szteilw2");
+  </script>
+
+  <style>
+    :root{
+      --nav:#163949;
+      --nav2:#224b5d;
+      --green:#173f31;
+      --green2:#245746;
+      --green3:#1d4c3b;
+      --gold:#c7a35b;
+      --paper:#f3efe6;
+      --paper2:#fbf8f1;
+      --line:#d8c8a3;
+      --ink:#24342d;
+      --muted:#6d6a62;
+      --red:#9a2b2b;
+      --shadow:0 14px 30px rgba(33,33,24,.12);
+      --deep-shadow:0 18px 34px rgba(21,52,38,.18);
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.32), rgba(255,255,255,0) 24%),
+        var(--paper);
+      color:var(--ink);
+      min-height:100%;
+    }
+
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    }
+
+    nav.container-fluid{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:linear-gradient(180deg,var(--nav2),var(--nav));
+      border-bottom:3px solid var(--gold);
+      padding:.65rem 1.5rem;
+      box-shadow:0 4px 18px rgba(0,0,0,.12);
+    }
+
+    .font-normal{font-weight:normal}
+
+    nav strong{
+      font-family:Impact,"Arial Narrow",Arial,sans-serif;
+      font-size:2.05rem;
+      letter-spacing:.02em;
+      font-weight:700;
+    }
+
+    nav a{
+      color:#f6f2e8 !important;
+      font-weight:700;
+      text-decoration:none;
+    }
+
+    nav [role=button]{
+      background:transparent;
+      border:1px solid rgba(255,255,255,.34);
+      color:#f6f2e8;
+      padding:.45rem .95rem;
+      border-radius:2px;
+    }
+
+    main.container{
+      max-width:1560px;
+      padding-top:1.2rem;
+      padding-bottom:2rem;
+    }
+
+    .hero-card,
+    .section-card{
+      background:linear-gradient(180deg,#fcfaf4,#f3ecde);
+      border:1px solid var(--line);
+      border-radius:8px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero-card::before,
+    .section-card::before{
+      content:"";
+      position:absolute;
+      inset:14px;
+      border:1px solid rgba(199,163,91,.16);
+      border-radius:6px;
+      pointer-events:none;
+    }
+
+    .hero-inner,
+    .section-inner{
+      padding:22px;
+      position:relative;
+      z-index:1;
+    }
+
+    .hero-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:1rem;
+    }
+
+    .hero-title,
+    .section-title{
+      font-family:Georgia,"Times New Roman",serif;
+      color:#183b30;
+      margin:0;
+      line-height:1.08;
+    }
+
+    .hero-title{
+      font-size:2.4rem;
+    }
+
+    .section-title{
+      font-size:1.95rem;
+    }
+
+    .hero-subtitle{
+      margin:.45rem 0 0;
+      color:var(--muted);
+      font-size:1.02rem;
+    }
+
+    .section-rule{
+      width:100%;
+      height:1px;
+      background:rgba(199,163,91,.34);
+      margin:14px 0 16px;
+    }
+
+    .hero-actions a{
+      text-decoration:none;
+    }
+
+    .facts-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .fact-card{
+      background:linear-gradient(180deg,#fffdf8,#f7f1e6);
+      border:1px solid rgba(199,163,91,.34);
+      border-radius:10px;
+      padding:14px 16px;
+      box-shadow:0 8px 18px rgba(34,35,23,.06);
+      min-height:104px;
+    }
+
+    .fact-label{
+      color:var(--muted);
+      font-size:.92rem;
+      margin-bottom:.45rem;
+    }
+
+    .fact-value{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:2rem;
+      line-height:1.05;
+      color:#173d2f;
+      font-weight:700;
+    }
+
+    .fact-sub{
+      margin-top:.4rem;
+      color:#4f5a52;
+      font-size:.92rem;
+    }
+
+    .courses-grid{
+      display:grid;
+      grid-template-columns:repeat(5, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .course-card{
+      border-radius:10px;
+      padding:16px;
+      text-align:center;
+      font-family:Georgia,"Times New Roman",serif;
+      font-weight:700;
+      font-size:1.15rem;
+      border:1px solid rgba(199,163,91,.34);
+      box-shadow:0 8px 18px rgba(34,35,23,.06);
+    }
+
+    .course-card.played{
+      background:linear-gradient(180deg,#2a654f,#173f31);
+      color:#f3ead5;
+      border-color:#255645;
+    }
+
+    .course-card.not-played{
+      background:linear-gradient(180deg,#ece8de,#e0d9ca);
+      color:#848177;
+      border-color:#d1c4a5;
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .masters-table{
+      width:100%;
+      border-collapse:collapse;
+      font-variant-numeric:tabular-nums;
+      background:#f7f3e8;
+    }
+
+    .masters-table thead th{
+      background:#1f5d47;
+      color:#f8f4ea;
+      padding:.76rem .7rem;
+      border:1px solid rgba(255,255,255,.10);
+      font-weight:700;
+      text-align:left;
+      white-space:nowrap;
+    }
+
+    .masters-table td{
+      padding:.82rem .7rem;
+      border:1px solid #d6ccb9;
+      background:#fbf8f1;
+      color:#22342e;
+      vertical-align:middle;
+    }
+
+    .masters-table tbody tr:nth-child(even) td{
+      background:#f3eddf;
+    }
+
+    .score-good{color:#216b49;font-weight:700}
+    .score-bad{color:var(--red);font-weight:700}
+    .score-even{color:#8c6d31;font-weight:700}
+
+    .summary-table td:first-child,
+    .summary-table td:nth-child(2){
+      font-weight:700;
+    }
+
+    .all-rounds-table{
+      min-width:1500px;
+    }
+
+    .all-rounds-table thead th,
+    .all-rounds-table td{
+      text-align:center;
+      white-space:nowrap;
+      padding:.7rem .55rem;
+    }
+
+    .all-rounds-table thead th:nth-child(1),
+    .all-rounds-table thead th:nth-child(2),
+    .all-rounds-table thead th:nth-child(3),
+    .all-rounds-table thead th:nth-child(4),
+    .all-rounds-table td:nth-child(1),
+    .all-rounds-table td:nth-child(2),
+    .all-rounds-table td:nth-child(3),
+    .all-rounds-table td:nth-child(4){
+      text-align:left;
+    }
+
+    .all-rounds-table td:nth-child(2){
+      font-weight:700;
+    }
+
+    .notice{
+      background:linear-gradient(180deg,#fffdf8,#f7f1e6);
+      border:1px solid rgba(199,163,91,.34);
+      border-radius:10px;
+      padding:1rem 1.1rem;
+      color:#4f5a52;
+    }
+
+    .footer-band{
+      margin-top:18px;
+      background:linear-gradient(180deg,#234c3d,#17384a);
+      color:#f2ede1;
+      border-top:2px solid var(--gold);
+      padding:18px 16px;
+      text-align:center;
+    }
+
+    .footer-band a{
+      color:#f2ede1;
+      text-decoration:none;
+      margin:0 10px;
+      font-weight:600;
+    }
+
+    @media (max-width:1280px){
+      .facts-grid{
+        grid-template-columns:repeat(3, minmax(0,1fr));
+      }
+
+      .courses-grid{
+        grid-template-columns:repeat(3, minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:920px){
+      .hero-top{
+        flex-direction:column;
+      }
+
+      .facts-grid,
+      .courses-grid{
+        grid-template-columns:repeat(2, minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:640px){
+      nav.container-fluid{
+        padding:.6rem 1rem;
+      }
+
+      nav strong{
+        font-size:1.7rem;
+      }
+
+      .hero-title,
+      .section-title{
+        font-size:1.6rem;
+      }
+
+      .facts-grid,
+      .courses-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="container-fluid">
+    <ul>
+      <li>
+        <strong class="font-normal">
+          <span style="color:#E30613">ACEL</span>
+          <span style="color:#020A3A">CUP</span>
+        </strong>
+      </li>
+    </ul>
+    <ul>
+      <li><a href="index.html">Leaderboard</a></li>
+      <li><a href="register.html">Registrer Runde</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="admin.html">Admin</a></li>
+      <li><a href="register.html#auth" role="button">Logg inn</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <section class="hero-card">
+      <div class="hero-inner">
+        <div class="hero-top">
+          <div>
+            <h1 class="hero-title" id="playerName">Spillerprofil</h1>
+            <p class="hero-subtitle" id="playerSubtitle">Laster spillerdata ...</p>
+          </div>
+          <div class="hero-actions">
+            <a href="index.html" role="button" class="secondary">Tilbake til leaderboard</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card" style="margin-top:18px;">
+      <div class="section-inner">
+        <h2 class="section-title">Fakta</h2>
+        <div class="section-rule"></div>
+        <div id="factsGrid" class="facts-grid"></div>
+      </div>
+    </section>
+
+    <section class="section-card" style="margin-top:18px;">
+      <div class="section-inner">
+        <h2 class="section-title">Spilte baner</h2>
+        <div class="section-rule"></div>
+        <div id="coursesGrid" class="courses-grid"></div>
+      </div>
+    </section>
+
+    <section class="section-card" style="margin-top:18px;">
+      <div class="section-inner">
+        <h2 class="section-title">Poenggivende runder</h2>
+        <div class="section-rule"></div>
+        <div style="overflow:auto;">
+          <table class="masters-table summary-table" id="pointsTable">
+            <thead>
+              <tr>
+                <th>Bane</th>
+                <th>Dato</th>
+                <th>Runde</th>
+                <th>Netto</th>
+                <th>Plass</th>
+                <th>Poeng</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card" style="margin-top:18px;">
+      <div class="section-inner">
+        <h2 class="section-title">Alle registrerte runder</h2>
+        <div class="section-rule"></div>
+        <div style="overflow:auto;">
+          <table class="masters-table all-rounds-table" id="allRoundsTable">
+            <thead>
+              <tr>
+                <th>Dato</th>
+                <th>Bane</th>
+                <th>Runde</th>
+                <th>Markør</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+                <th>13</th>
+                <th>14</th>
+                <th>15</th>
+                <th>16</th>
+                <th>17</th>
+                <th>18</th>
+                <th>Brutto</th>
+                <th>Netto</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-band">
+    <a href="regler.html">Regler</a> |
+    <a href="kontakt.html">Kontakt</a> |
+    <a href="personvern.html">Personvern</a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://geduwhzlwdphouslxhsd.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_W8nt1u4S9htR3Zlz8-8SDA__cvNb_jG';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const COURSE_ORDER = ['Solnør GK','Giske GK','Volda GK','Sunnmøre GK','Rauma GK'];
+    const MONTH_NAMES = ['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
+    const POINTS_BY_RANK = {1:500,2:400,3:350,4:300,5:250,6:200,7:150,8:100,9:50,10:50};
+
+    const el = {
+      playerName: document.getElementById('playerName'),
+      playerSubtitle: document.getElementById('playerSubtitle'),
+      factsGrid: document.getElementById('factsGrid'),
+      coursesGrid: document.getElementById('coursesGrid'),
+      pointsTableBody: document.querySelector('#pointsTable tbody'),
+      allRoundsTableBody: document.querySelector('#allRoundsTable tbody')
+    };
+
+    function getPlayerIdFromUrl(){
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    function formatDate(dateStr){
+      if(!dateStr) return '—';
+      const [y,m,d] = dateStr.split('-');
+      return `${d}.${m}.${y}`;
+    }
+
+    function formatMonthKey(key){
+      if(!key) return '—';
+      const [y,m] = key.split('-');
+      return `${MONTH_NAMES[Number(m)-1]} ${y}`;
+    }
+
+    function scoreText(value){
+      return value < 0 ? String(value) : value > 0 ? `+${value}` : 'E';
+    }
+
+    function scoreHtml(value){
+      if(value < 0) return `<span class="score-good">${value}</span>`;
+      if(value > 0) return `<span class="score-bad">+${value}</span>`;
+      return `<span class="score-even">E</span>`;
+    }
+
+    function formatLabel(format){
+      return format === 'front' ? 'Front 9' : format === 'back' ? 'Back 9' : '18 Hull';
+    }
+
+    function avg(values){
+      if(!values.length) return null;
+      return values.reduce((sum, v) => sum + v, 0) / values.length;
+    }
+
+    function applyCompetitionRanking(list, scoreAccessor){
+      let rank = 0;
+      let prevScore = null;
+      let seen = 0;
+
+      return list.map(item => {
+        seen += 1;
+        const score = scoreAccessor(item);
+        if(prevScore === null || score !== prevScore){
+          rank = seen;
+          prevScore = score;
+        }
+        return { ...item, rank };
+      });
+    }
+
+    function pointsForRank(rank){
+      return rank <= 10 ? (POINTS_BY_RANK[rank] || 20) : 20;
+    }
+
+    function getMonthlyRanking(rounds, monthKey){
+      const filtered = rounds
+        .filter(r => r.month_key === monthKey)
+        .sort((a,b) =>
+          a.score_relative - b.score_relative ||
+          a.net_total - b.net_total ||
+          a.date.localeCompare(b.date) ||
+          a.player_name.localeCompare(b.player_name, 'no')
+        );
+
+      return applyCompetitionRanking(filtered, item => item.score_relative);
+    }
+
+    function getBestRoundsPerPlayerPerCourse(rounds){
+      const map = new Map();
+
+      for(const round of rounds){
+        const key = round.player_id + '__' + round.course;
+        const current = map.get(key);
+
+        if(
+          !current ||
+          round.score_relative < current.score_relative ||
+          (round.score_relative === current.score_relative && round.net_total < current.net_total) ||
+          (round.score_relative === current.score_relative && round.net_total === current.net_total && round.date < current.date)
+        ){
+          map.set(key, round);
+        }
+      }
+
+      return [...map.values()];
+    }
+
+    function getCourseLeaderboard(rounds, course){
+      const bestRounds = getBestRoundsPerPlayerPerCourse(rounds)
+        .filter(r => r.course === course)
+        .sort((a,b) =>
+          a.score_relative - b.score_relative ||
+          a.net_total - b.net_total ||
+          a.date.localeCompare(b.date) ||
+          a.player_name.localeCompare(b.player_name, 'no')
+        );
+
+      return applyCompetitionRanking(bestRounds, item => item.score_relative)
+        .map(item => ({ ...item, points: pointsForRank(item.rank) }));
+    }
+
+    function getSeasonLeaderboard(rounds){
+      const byPlayer = new Map();
+
+      for(const course of COURSE_ORDER){
+        for(const row of getCourseLeaderboard(rounds, course)){
+          const current = byPlayer.get(row.player_id) || {
+            player_id: row.player_id,
+            player_name: row.player_name,
+            points: 0,
+            bestScore: null
+          };
+
+          current.points += row.points;
+
+          if(current.bestScore === null || row.score_relative < current.bestScore){
+            current.bestScore = row.score_relative;
+          }
+
+          byPlayer.set(row.player_id, current);
+        }
+      }
+
+      return [...byPlayer.values()].sort((a,b) =>
+        b.points - a.points ||
+        (a.bestScore ?? 999) - (b.bestScore ?? 999) ||
+        a.player_name.localeCompare(b.player_name, 'no')
+      );
+    }
+
+    function getHoleScoreValue(round, holeNumber){
+      const holes = Array.isArray(round.hole_breakdown) ? round.hole_breakdown : [];
+      const hole = holes.find(h => Number(h.hole) === Number(holeNumber));
+
+      if(!hole || !hole.played) return '—';
+      return hole.grossInput ?? '—';
+    }
+
+    function getHoleStats(rounds){
+      const stats = {
+        holeInOne: 0,
+        albatross: 0,
+        eagle: 0,
+        birdie: 0,
+        par: 0,
+        bogey: 0,
+        doubleBogey: 0,
+        tripleOrWorse: 0
+      };
+
+      for(const round of rounds){
+        const holes = Array.isArray(round.hole_breakdown) ? round.hole_breakdown : [];
+
+        for(const hole of holes){
+          if(!hole.played || hole.grossInput == null) continue;
+
+          const gross = Number(hole.grossInput);
+          const par = Number(hole.par);
+          const diff = gross - par;
+
+          if(gross === 1){
+            stats.holeInOne += 1;
+          } else if(diff <= -3){
+            stats.albatross += 1;
+          } else if(diff === -2){
+            stats.eagle += 1;
+          } else if(diff === -1){
+            stats.birdie += 1;
+          } else if(diff === 0){
+            stats.par += 1;
+          } else if(diff === 1){
+            stats.bogey += 1;
+          } else if(diff === 2){
+            stats.doubleBogey += 1;
+          } else {
+            stats.tripleOrWorse += 1;
+          }
+        }
+      }
+
+      return stats;
+    }
+
+    function getMonthlyWins(allRounds, playerId){
+      const monthKeys = [...new Set(allRounds.map(r => r.month_key).filter(Boolean))].sort();
+      let wins = 0;
+
+      for(const key of monthKeys){
+        const ranking = getMonthlyRanking(allRounds, key);
+        const isWinner = ranking.some(r => String(r.player_id) === String(playerId) && r.rank === 1);
+        if(isWinner) wins += 1;
+      }
+
+      return wins;
+    }
+
+    function getPointsGivingRounds(allRounds, playerId){
+      const bestByCourse = getBestRoundsPerPlayerPerCourse(allRounds)
+        .filter(r => String(r.player_id) === String(playerId));
+
+      return COURSE_ORDER.map(course => {
+        const countedRound = bestByCourse.find(r => r.course === course);
+        if(!countedRound) return null;
+
+        const leaderboard = getCourseLeaderboard(allRounds, course);
+        const row = leaderboard.find(r => String(r.player_id) === String(playerId));
+
+        return {
+          ...countedRound,
+          points: row?.points ?? 0,
+          rank: row?.rank ?? null
+        };
+      }).filter(Boolean);
+    }
+
+    function renderHeader(player, rounds){
+      el.playerName.textContent = player.name || 'Spillerprofil';
+      el.playerSubtitle.textContent = rounds.length
+        ? `${player.gender || 'Spiller'} • ${rounds.length} registrerte runder`
+        : `${player.gender || 'Spiller'} • Ingen registrerte runder ennå`;
+    }
+
+    function renderFacts(player, playerRounds, allRounds){
+      const holeStats = getHoleStats(playerRounds);
+      const averageHandicap = avg(
+        playerRounds
+          .map(r => Number(r.handicap_index))
+          .filter(v => Number.isFinite(v))
+      );
+
+      const seasonRow = getSeasonLeaderboard(allRounds).find(r => String(r.player_id) === String(player.id));
+      const bestRound = playerRounds.length
+        ? [...playerRounds].sort((a,b) =>
+            a.score_relative - b.score_relative ||
+            a.net_total - b.net_total ||
+            a.date.localeCompare(b.date)
+          )[0]
+        : null;
+
+      const monthlyWins = getMonthlyWins(allRounds, player.id);
+
+      const factItems = [
+        {
+          label: 'Gjennomsnittlig handicap',
+          value: averageHandicap == null ? '—' : averageHandicap.toFixed(1)
+        },
+        {
+          label: 'Antall spilte runder',
+          value: String(playerRounds.length)
+        },
+        {
+          label: 'Sesongpoeng',
+          value: seasonRow ? String(seasonRow.points) : '0'
+        },
+        {
+          label: 'Beste registrerte runde',
+          value: bestRound ? scoreText(bestRound.score_relative) : '—',
+          sub: bestRound ? `${bestRound.course} • ${formatDate(bestRound.date)}` : ''
+        },
+        {
+          label: 'Månedsseiere',
+          value: String(monthlyWins)
+        },
+        {
+          label: 'Hole in one',
+          value: String(holeStats.holeInOne)
+        },
+        {
+          label: 'Albatross',
+          value: String(holeStats.albatross)
+        },
+        {
+          label: 'Eagle',
+          value: String(holeStats.eagle)
+        },
+        {
+          label: 'Birdie',
+          value: String(holeStats.birdie)
+        },
+        {
+          label: 'Par',
+          value: String(holeStats.par)
+        },
+        {
+          label: 'Bogey',
+          value: String(holeStats.bogey)
+        },
+        {
+          label: 'Dobbelbogey',
+          value: String(holeStats.doubleBogey)
+        },
+        {
+          label: 'Trippelbogey eller verre',
+          value: String(holeStats.tripleOrWorse)
+        }
+      ];
+
+      el.factsGrid.innerHTML = factItems.map(item => `
+        <div class="fact-card">
+          <div class="fact-label">${item.label}</div>
+          <div class="fact-value">${item.value}</div>
+          ${item.sub ? `<div class="fact-sub">${item.sub}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function renderCourses(playerRounds){
+      const played = new Set(playerRounds.map(r => r.course));
+
+      el.coursesGrid.innerHTML = COURSE_ORDER.map(course => `
+        <div class="course-card ${played.has(course) ? 'played' : 'not-played'}">
+          ${course}
+        </div>
+      `).join('');
+    }
+
+    function renderPointsGivingRounds(allRounds, player){
+      const rows = getPointsGivingRounds(allRounds, player.id);
+
+      el.pointsTableBody.innerHTML = rows.length
+        ? rows.map(row => `
+            <tr>
+              <td>${row.course}</td>
+              <td>${formatDate(row.date)}</td>
+              <td>${formatLabel(row.format)}</td>
+              <td>${scoreHtml(row.score_relative)}</td>
+              <td>${row.rank ? row.rank + '.' : '—'}</td>
+              <td>${row.points}</td>
+            </tr>
+          `).join('')
+        : `<tr><td colspan="6">Ingen poenggivende runder ennå.</td></tr>`;
+    }
+
+    function renderAllRounds(playerRounds){
+      const rows = [...playerRounds].sort((a,b) =>
+        b.date.localeCompare(a.date) ||
+        (b.created_at || '').localeCompare(a.created_at || '')
+      );
+
+      el.allRoundsTableBody.innerHTML = rows.length
+        ? rows.map(round => `
+            <tr>
+              <td>${formatDate(round.date)}</td>
+              <td>${round.course}</td>
+              <td>${formatLabel(round.format)}</td>
+              <td>${round.marker || '—'}</td>
+              ${Array.from({ length: 18 }, (_, i) => `<td>${getHoleScoreValue(round, i + 1)}</td>`).join('')}
+              <td>${round.gross_total ?? '—'}</td>
+              <td>${round.net_total ?? '—'}</td>
+              <td>${scoreHtml(round.score_relative ?? 0)}</td>
+            </tr>
+          `).join('')
+        : `<tr><td colspan="25">Ingen registrerte runder ennå.</td></tr>`;
+    }
+
+    function renderError(message){
+      el.playerName.textContent = 'Spillerprofil';
+      el.playerSubtitle.textContent = message;
+      el.factsGrid.innerHTML = `<div class="notice">${message}</div>`;
+      el.coursesGrid.innerHTML = '';
+      el.pointsTableBody.innerHTML = `<tr><td colspan="6">${message}</td></tr>`;
+      el.allRoundsTableBody.innerHTML = `<tr><td colspan="25">${message}</td></tr>`;
+    }
+
+    async function init(){
+      const playerId = getPlayerIdFromUrl();
+
+      if(!playerId){
+        renderError('Mangler spiller-id i URL. Åpne siden fra listen over påmeldte deltakere.');
+        return;
+      }
+
+      const [
+        { data: player, error: playerError },
+        { data: playerRounds, error: playerRoundsError },
+        { data: allRounds, error: allRoundsError }
+      ] = await Promise.all([
+        supabaseClient.from('players').select('*').eq('id', playerId).maybeSingle(),
+        supabaseClient.from('rounds').select('*').eq('player_id', playerId).order('date', { ascending:false }),
+        supabaseClient.from('rounds').select('*').order('date', { ascending:false })
+      ]);
+
+      if(playerError){
+        console.error(playerError);
+        renderError('Kunne ikke hente spillerprofil.');
+        return;
+      }
+
+      if(playerRoundsError){
+        console.error(playerRoundsError);
+        renderError('Kunne ikke hente spillerens runder.');
+        return;
+      }
+
+      if(allRoundsError){
+        console.error(allRoundsError);
+        renderError('Kunne ikke hente sammenligningsdata.');
+        return;
+      }
+
+      if(!player){
+        renderError('Fant ikke spilleren.');
+        return;
+      }
+
+      const rounds = playerRounds || [];
+      const all = allRounds || [];
+
+      renderHeader(player, rounds);
+      renderFacts(player, rounds, all);
+      renderCourses(rounds);
+      renderPointsGivingRounds(all, player);
+      renderAllRounds(rounds);
+    }
+
+    init();
+  </script>
+</body>
+</html>
