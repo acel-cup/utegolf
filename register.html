@@ -340,7 +340,7 @@
               <label for="scoreConfirmation">
                 <input type="checkbox" id="scoreConfirmation" required>
                 <span>
-                  Jeg er kjent med at scorekort må dokumenteres til turerningsledelsen, dersom dette blir forespurt. 
+                  Jeg bekrefter at score også er registrert i golfbox.
                 </span>
               </label>
             </div>
@@ -352,6 +352,26 @@
       </section>
     </div>
   </main>
+
+  <dialog id="scoreReminderDialog">
+    <div class="reminder-modal">
+      <header>
+        <strong>Viktig informasjon</strong>
+        <button type="button" aria-label="Lukk" rel="prev" id="closeScoreReminderBtn"></button>
+      </header>
+
+      <div class="modal-body">
+        <p>
+          Jeg er kjent med at scorekort kan måtte fremlegges ved kontroll av måneds- og sesongseier.
+        </p>
+
+      </div>
+
+      <footer>
+        <button type="button" class="secondary" id="confirmScoreReminderBtn">OK</button>
+      </footer>
+    </div>
+  </dialog>
 
   <div class="toast" id="toast"></div>
 
