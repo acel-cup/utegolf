@@ -168,6 +168,37 @@
       color:var(--green);
     }
 
+    .scorecard-warnings{
+      display:grid;
+      gap:.5rem;
+      margin:-.25rem 0 1rem;
+    }
+
+    .warning-box{
+      padding:.75rem .9rem;
+      border-radius:8px;
+      border:1px solid rgba(199,163,91,.38);
+      background:#fffdf8;
+      color:#31443a;
+    }
+
+    .warning-box strong{
+      display:block;
+      margin-bottom:.15rem;
+      color:var(--green);
+    }
+
+    .warning-box.warn{
+      border-color:rgba(154,43,43,.45);
+      background:#fff5f2;
+      color:#6d2424;
+    }
+
+    .warning-box.ok{
+      border-color:rgba(33,107,73,.35);
+      background:#f3fbf6;
+    }
+
     .scorecard-meta{
       display:grid;
       grid-template-columns:repeat(5,1fr);
@@ -257,6 +288,8 @@
       border-radius:14px;
       width:min(1200px,96vw);
       max-width:96vw;
+      max-height:90vh;
+      margin:6vh auto 4vh;
     }
 
     dialog::backdrop{
@@ -269,6 +302,9 @@
       border:1px solid var(--line);
       border-radius:14px;
       overflow:hidden;
+      max-height:90vh;
+      display:flex;
+      flex-direction:column;
     }
 
     .modal-header{
@@ -280,6 +316,7 @@
       background:linear-gradient(180deg,#1f5d47,#184334);
       color:#f8f4ea;
       border-bottom:2px solid var(--gold);
+      flex:0 0 auto;
     }
 
     .modal-header h3{
@@ -290,6 +327,8 @@
 
     .modal-body{
       padding:1rem 1.2rem 1.2rem;
+      overflow:auto;
+      max-height:calc(90vh - 82px);
     }
 
     .modal-footer{
@@ -297,6 +336,7 @@
       justify-content:flex-end;
       gap:.75rem;
       padding:0 1.2rem 1.2rem;
+      flex:0 0 auto;
     }
 
     .help-text{
@@ -316,6 +356,19 @@
       .scorecard-meta,
       .score-summary{
         grid-template-columns:1fr;
+      }
+
+      dialog{
+        margin:3vh auto 2vh;
+        max-height:94vh;
+      }
+
+      .modal-card{
+        max-height:94vh;
+      }
+
+      .modal-body{
+        max-height:calc(94vh - 82px);
       }
     }
   </style>
@@ -398,7 +451,7 @@
                   <th>Spiller</th>
                   <th>Markør</th>
                   <th>Bane</th>
-                  <th>Tee</th>
+                  <th>Teested</th>
                   <th>Format</th>
                   <th>HCP</th>
                   <th>PHCP</th>
@@ -426,10 +479,11 @@
       <div class="modal-body">
         <div class="scorecard-control-note">
           <strong>Kontroll mot Golfbox:</strong>
-          Sjekk bane, tee, handicap, spille-HCP, format og markør før du godkjenner eller redigerer runden.
+          Sjekk bane, teested, handicap, spille-HCP, format og markør før du godkjenner eller redigerer runden.
         </div>
 
         <div class="scorecard-meta" id="scorecardMeta"></div>
+        <div class="scorecard-warnings" id="scorecardWarnings"></div>
 
         <p class="help-text">
           Her kan du justere hullscore én og én. Når du lagrer, beregnes brutto, netto, score og måned på nytt automatisk.
@@ -499,6 +553,7 @@
       scorecardDialog: document.getElementById('scorecardDialog'),
       scorecardTitle: document.getElementById('scorecardTitle'),
       scorecardMeta: document.getElementById('scorecardMeta'),
+      scorecardWarnings: document.getElementById('scorecardWarnings'),
       scorecardTableBody: document.querySelector('#scorecardTable tbody'),
       closeScorecardBtn: document.getElementById('closeScorecardBtn'),
       cancelScorecardBtn: document.getElementById('cancelScorecardBtn'),
@@ -525,25 +580,69 @@
       for(const value of values){
         if(value !== undefined && value !== null && value !== '') return value;
       }
+
+      return '—';
+    }
+
+    function normalizeDisplayValue(value){
+      if(value === undefined || value === null || value === '') return '';
+
+      if(typeof value === 'object'){
+        return firstValue(
+          value.name,
+          value.label,
+          value.value,
+          value.tee,
+          value.tee_name,
+          value.teeLabel,
+          value.tee_label,
+          value.color,
+          value.length,
+          value.meters,
+          value.id
+        );
+      }
+
+      return value;
+    }
+
+    function firstDisplayValue(...values){
+      for(const value of values){
+        const normalized = normalizeDisplayValue(value);
+
+        if(
+          normalized !== undefined &&
+          normalized !== null &&
+          normalized !== '' &&
+          normalized !== '—'
+        ){
+          return normalized;
+        }
+      }
+
       return '—';
     }
 
     function formatMonthKey(key){
       if(!key) return '—';
+
       const [y,m] = key.split('-');
       return MONTH_NAMES[Number(m)-1] + ' ' + y;
     }
 
     function formatDate(dateStr){
       if(!dateStr) return '—';
+
       const [y,m,d] = dateStr.split('-');
       return `${d}.${m}.${y}`;
     }
 
     function formatDateTime(value){
       if(!value) return '—';
+
       const date = new Date(value);
       if(Number.isNaN(date.getTime())) return '—';
+
       return date.toLocaleString('no-NO', {
         day:'2-digit',
         month:'2-digit',
@@ -556,6 +655,7 @@
     function scoreText(v){
       const n = Number(v);
       if(!Number.isFinite(n)) return '—';
+
       return n < 0 ? String(n) : n > 0 ? `+${n}` : 'E';
     }
 
@@ -572,7 +672,11 @@
 
     function fillSelect(select, values, labelFn){
       const current = select.value;
-      select.innerHTML = values.map(v => `<option value="${String(v).replaceAll('"','&quot;')}">${labelFn(v)}</option>`).join('');
+
+      select.innerHTML = values
+        .map(v => `<option value="${escapeHtml(v)}">${escapeHtml(labelFn(v))}</option>`)
+        .join('');
+
       if(values.includes(current)) select.value = current;
     }
 
@@ -598,6 +702,7 @@
       const gross = numeric(grossInput);
       const maxTellende = calculateMaxTellende(par, strokesReceived);
       const cappedGross = Math.min(gross, maxTellende);
+
       return cappedGross - numeric(strokesReceived);
     }
 
@@ -615,6 +720,150 @@
       );
     }
 
+    function getTeeValue(round){
+      const holes = Array.isArray(round?.hole_breakdown) ? round.hole_breakdown : [];
+      const firstHole = holes[0] || {};
+
+      return firstDisplayValue(
+        round.tee,
+        round.tee_name,
+        round.tee_label,
+        round.teeLabel,
+        round.tee_color,
+        round.teeColor,
+        round.tee_box,
+        round.teeBox,
+        round.tee_box_name,
+        round.teeBoxName,
+        round.selected_tee,
+        round.selectedTee,
+        round.teested,
+        round.tee_number,
+        round.teeNumber,
+        round.tee_length,
+        round.teeLength,
+        round.tee_meters,
+        round.teeMeters,
+        firstHole.tee,
+        firstHole.tee_name,
+        firstHole.tee_label,
+        firstHole.teeBox,
+        firstHole.tee_box,
+        firstHole.teested
+      );
+    }
+
+    function getHandicapIndexValue(round){
+      return firstDisplayValue(
+        round.handicap_index,
+        round.handicap,
+        round.hcp,
+        round.player_hcp,
+        round.playerHcp
+      );
+    }
+
+    function getPlayingHandicapValue(round){
+      return firstDisplayValue(
+        round.playing_handicap,
+        round.playing_hcp,
+        round.playingHcp,
+        round.course_hcp,
+        round.courseHcp,
+        round.phcp,
+        round.strokes_received
+      );
+    }
+
+    function getPlayedHoles(round){
+      const holes = Array.isArray(round?.hole_breakdown) ? round.hole_breakdown : [];
+
+      return holes.filter(h =>
+        h.played !== false &&
+        h.grossInput !== null &&
+        h.grossInput !== '' &&
+        h.grossInput !== undefined
+      );
+    }
+
+    function sumReceivedStrokes(round){
+      return getPlayedHoles(round).reduce((sum, hole) => {
+        return sum + numeric(hole.strokesReceived);
+      }, 0);
+    }
+
+    function formatHandicapDisplay(value){
+      const n = Number(value);
+      if(!Number.isFinite(n)) return escapeHtml(value);
+
+      return n.toFixed(1);
+    }
+
+    function formatWholeNumberDisplay(value){
+      const n = Number(value);
+      if(!Number.isFinite(n)) return escapeHtml(value);
+
+      return String(Math.round(n));
+    }
+
+    function renderControlWarnings(round){
+      const tee = getTeeValue(round);
+      const playingHandicap = getPlayingHandicapValue(round);
+      const receivedStrokes = sumReceivedStrokes(round);
+
+      const phcpNumber = Number(playingHandicap);
+      const hasPhcp = Number.isFinite(phcpNumber);
+      const phcpMatchesHoleData = hasPhcp ? Math.round(phcpNumber) === Math.round(receivedStrokes) : null;
+
+      const warnings = [];
+
+      if(tee === '—'){
+        warnings.push(`
+          <div class="warning-box warn">
+            <strong>Teested mangler</strong>
+            Runden har ikke lagret teested/utslag. Da kan du ikke kontrollere sikkert om spilleren har valgt riktig tee mot Golfbox.
+          </div>
+        `);
+      } else {
+        warnings.push(`
+          <div class="warning-box ok">
+            <strong>Teested registrert</strong>
+            Sjekk at Golfbox viser samme teested som her: ${escapeHtml(tee)}.
+          </div>
+        `);
+      }
+
+      if(hasPhcp && !phcpMatchesHoleData){
+        warnings.push(`
+          <div class="warning-box warn">
+            <strong>PHCP stemmer ikke med hull-data</strong>
+            Lagret PHCP er ${escapeHtml(playingHandicap)}, men hullene har totalt ${receivedStrokes} tildelte slag.
+            Dette kan tyde på feil teested, feil format eller feil handicapgrunnlag.
+          </div>
+        `);
+      }
+
+      if(hasPhcp && phcpMatchesHoleData){
+        warnings.push(`
+          <div class="warning-box ok">
+            <strong>PHCP-kontroll</strong>
+            Lagret PHCP stemmer med tildelte slag i scorekortet: ${receivedStrokes}.
+          </div>
+        `);
+      }
+
+      if(!hasPhcp){
+        warnings.push(`
+          <div class="warning-box warn">
+            <strong>PHCP mangler</strong>
+            Runden mangler lagret spille-HCP. Kontroller ekstra nøye mot Golfbox.
+          </div>
+        `);
+      }
+
+      el.scorecardWarnings.innerHTML = warnings.join('');
+    }
+
     function recalculateRound(round){
       const holes = Array.isArray(round.hole_breakdown) ? round.hole_breakdown : [];
 
@@ -623,7 +872,12 @@
       let parTotal = 0;
 
       for(const hole of holes){
-        const played = hole.played !== false && hole.grossInput !== null && hole.grossInput !== '' && !Number.isNaN(Number(hole.grossInput));
+        const played =
+          hole.played !== false &&
+          hole.grossInput !== null &&
+          hole.grossInput !== '' &&
+          !Number.isNaN(Number(hole.grossInput));
+
         if(!played) continue;
 
         const par = numeric(hole.par);
@@ -650,11 +904,15 @@
 
     function renderScoreSummary(round){
       const summary = recalculateRound(round);
+
       el.sumGross.textContent = summary.grossTotal;
       el.sumNet.textContent = summary.netTotal;
       el.sumPar.textContent = summary.parTotal;
       el.sumRelative.textContent = scoreText(summary.relative);
-      el.sumRelative.className = summary.relative < 0 ? 'score-good' : summary.relative > 0 ? 'score-bad' : 'score-even';
+      el.sumRelative.className =
+        summary.relative < 0 ? 'score-good' :
+        summary.relative > 0 ? 'score-bad' :
+        'score-even';
     }
 
     function renderScorecardTable(){
@@ -675,22 +933,22 @@
 
         return `
           <tr>
-            <td>${hole.hole ?? (index + 1)}</td>
-            <td>${par}</td>
-            <td>${hole.hcp ?? ''}</td>
-            <td>${strokesReceived}</td>
+            <td>${escapeHtml(hole.hole ?? (index + 1))}</td>
+            <td>${escapeHtml(par)}</td>
+            <td>${escapeHtml(hole.hcp ?? '')}</td>
+            <td>${escapeHtml(strokesReceived)}</td>
             <td>
               <input
                 type="number"
                 min="1"
                 step="1"
-                value="${gross}"
+                value="${escapeHtml(gross)}"
                 data-hole-index="${index}"
                 class="hole-gross-input"
               >
             </td>
-            <td>${maxTellende}</td>
-            <td>${tellendeNetto}</td>
+            <td>${escapeHtml(maxTellende)}</td>
+            <td>${escapeHtml(tellendeNetto)}</td>
           </tr>
         `;
       }).join('');
@@ -705,6 +963,7 @@
       const index = Number(input.dataset.holeIndex);
       const holes = state.selectedRound?.hole_breakdown || [];
       const hole = holes[index];
+
       if(!hole) return;
 
       const value = input.value.trim();
@@ -722,36 +981,41 @@
     }
 
     function renderScorecardMeta(round){
-      const tee = firstValue(round.tee, round.tee_name, round.tee_color);
-      const handicapIndex = firstValue(round.handicap_index, round.handicap, round.hcp);
-      const playingHandicap = firstValue(round.playing_handicap, round.playing_hcp, round.course_hcp, round.strokes_received);
-      const marker = firstValue(round.marker, round.markor, round.marker_name);
-      const holes = Array.isArray(round.hole_breakdown) ? round.hole_breakdown.filter(h => h.played !== false).length : '—';
+      const tee = getTeeValue(round);
+      const handicapIndex = getHandicapIndexValue(round);
+      const playingHandicap = getPlayingHandicapValue(round);
+      const marker = firstDisplayValue(round.marker, round.markor, round.marker_name);
+      const holesPlayed = getPlayedHoles(round).length || '—';
+      const receivedStrokes = sumReceivedStrokes(round);
       const proofUrl = getProofUrl(round);
 
       el.scorecardMeta.innerHTML = `
         <div class="meta-box highlight"><strong>Bane</strong><span>${escapeHtml(round.course)}</span></div>
-        <div class="meta-box highlight"><strong>Tee / utslag</strong><span>${escapeHtml(tee)}</span></div>
-        <div class="meta-box highlight"><strong>Spiller-HCP</strong><span>${escapeHtml(handicapIndex)}</span></div>
-        <div class="meta-box highlight"><strong>Spille-HCP / PHCP</strong><span>${escapeHtml(playingHandicap)}</span></div>
-        <div class="meta-box"><strong>Format</strong><span>${escapeHtml(getFormatLabel(round.format))}</span></div>
+        <div class="meta-box highlight"><strong>Teested / utslag</strong><span>${escapeHtml(tee)}</span></div>
+        <div class="meta-box highlight"><strong>Spiller-HCP</strong><span>${formatHandicapDisplay(handicapIndex)}</span></div>
+        <div class="meta-box highlight"><strong>Spille-HCP / PHCP</strong><span>${formatWholeNumberDisplay(playingHandicap)}</span></div>
+        <div class="meta-box highlight"><strong>Tildelte slag i scorekort</strong><span>${escapeHtml(receivedStrokes)}</span></div>
 
+        <div class="meta-box"><strong>Format</strong><span>${escapeHtml(getFormatLabel(round.format))}</span></div>
         <div class="meta-box"><strong>Spiller</strong><span>${escapeHtml(round.player_name)}</span></div>
         <div class="meta-box"><strong>Dato</strong><span>${escapeHtml(formatDate(round.date))}</span></div>
         <div class="meta-box"><strong>Markør</strong><span>${escapeHtml(marker)}</span></div>
-        <div class="meta-box"><strong>Hull registrert</strong><span>${escapeHtml(holes)}</span></div>
-        <div class="meta-box"><strong>Måned</strong><span>${escapeHtml(formatMonthKey(round.month_key))}</span></div>
+        <div class="meta-box"><strong>Hull registrert</strong><span>${escapeHtml(holesPlayed)}</span></div>
 
+        <div class="meta-box"><strong>Måned</strong><span>${escapeHtml(formatMonthKey(round.month_key))}</span></div>
         <div class="meta-box"><strong>Registrert</strong><span>${escapeHtml(formatDateTime(round.created_at))}</span></div>
         <div class="meta-box"><strong>Lagret brutto</strong><span>${escapeHtml(firstValue(round.gross_total))}</span></div>
         <div class="meta-box"><strong>Lagret netto</strong><span>${escapeHtml(firstValue(round.net_total))}</span></div>
         <div class="meta-box"><strong>Lagret score</strong><span>${scoreHtml(round.score_relative)}</span></div>
+
         <div class="meta-box"><strong>Golfbox-bilde</strong><span>${
           proofUrl === '—'
             ? '—'
             : `<a class="proof-link" href="${escapeHtml(proofUrl)}" target="_blank" rel="noopener">Åpne</a>`
         }</span></div>
       `;
+
+      renderControlWarnings(round);
     }
 
     async function refreshRounds(){
@@ -766,7 +1030,13 @@
       }
 
       state.rounds = rounds || [];
-      fillSelect(el.filterMonth, ['', ...[...new Set(state.rounds.map(r => r.month_key))].sort()], v => v ? formatMonthKey(v) : 'Alle');
+
+      fillSelect(
+        el.filterMonth,
+        ['', ...[...new Set(state.rounds.map(r => r.month_key))].filter(Boolean).sort()],
+        v => v ? formatMonthKey(v) : 'Alle'
+      );
+
       renderRoundsTable();
     }
 
@@ -804,6 +1074,7 @@
       await refreshRounds();
 
       fillSelect(el.filterCourse, ['', ...COURSE_ORDER], v => v || 'Alle');
+
       fillSelect(
         el.filterPlayer,
         ['', ...state.players.map(p => String(p.id))],
@@ -820,42 +1091,52 @@
       if(el.filterFormat.value) rounds = rounds.filter(r => r.format === el.filterFormat.value);
 
       const sort = el.sortRounds.value;
+
       rounds.sort((a,b) => {
         switch(sort){
           case 'date-asc':
-            return a.date.localeCompare(b.date);
+            return String(a.date || '').localeCompare(String(b.date || ''));
+
           case 'score-asc':
-            return a.score_relative - b.score_relative || a.date.localeCompare(b.date);
+            return numeric(a.score_relative, 9999) - numeric(b.score_relative, 9999) ||
+              String(a.date || '').localeCompare(String(b.date || ''));
+
           case 'score-desc':
-            return b.score_relative - a.score_relative || b.date.localeCompare(a.date);
+            return numeric(b.score_relative, -9999) - numeric(a.score_relative, -9999) ||
+              String(b.date || '').localeCompare(String(a.date || ''));
+
           case 'player-asc':
-            return a.player_name.localeCompare(b.player_name,'no');
+            return String(a.player_name || '').localeCompare(String(b.player_name || ''),'no');
+
           case 'course-asc':
-            return a.course.localeCompare(b.course,'no') || a.date.localeCompare(b.date);
+            return String(a.course || '').localeCompare(String(b.course || ''),'no') ||
+              String(a.date || '').localeCompare(String(b.date || ''));
+
           default:
-            return b.date.localeCompare(a.date) || (b.created_at || '').localeCompare(a.created_at || '');
+            return String(b.date || '').localeCompare(String(a.date || '')) ||
+              String(b.created_at || '').localeCompare(String(a.created_at || ''));
         }
       });
 
       el.roundsTableBody.innerHTML = rounds.length
         ? rounds.map(r => `
             <tr>
-              <td>${formatDate(r.date)}</td>
-              <td>${formatMonthKey(r.month_key)}</td>
+              <td>${escapeHtml(formatDate(r.date))}</td>
+              <td>${escapeHtml(formatMonthKey(r.month_key))}</td>
               <td>${escapeHtml(r.player_name)}</td>
               <td>${escapeHtml(r.marker || '—')}</td>
               <td>${escapeHtml(r.course)}</td>
-              <td>${escapeHtml(r.tee || '—')}</td>
-              <td>${getFormatLabel(r.format)}</td>
-              <td>${Number(r.handicap_index || 0).toFixed(1)}</td>
-              <td>${escapeHtml(r.playing_handicap ?? '—')}</td>
+              <td>${escapeHtml(getTeeValue(r))}</td>
+              <td>${escapeHtml(getFormatLabel(r.format))}</td>
+              <td>${formatHandicapDisplay(getHandicapIndexValue(r))}</td>
+              <td>${formatWholeNumberDisplay(getPlayingHandicapValue(r))}</td>
               <td>${escapeHtml(r.gross_total ?? '—')}</td>
               <td>${escapeHtml(r.net_total ?? '—')}</td>
               <td>${scoreHtml(r.score_relative)}</td>
               <td>
                 <div class="actions">
-                  <button type="button" data-view="${r.id}" class="btn-small">Vis</button>
-                  <button type="button" data-del="${r.id}" class="secondary btn-small">Slett</button>
+                  <button type="button" data-view="${escapeHtml(r.id)}" class="btn-small">Vis</button>
+                  <button type="button" data-del="${escapeHtml(r.id)}" class="secondary btn-small">Slett</button>
                 </div>
               </td>
             </tr>
@@ -880,15 +1161,19 @@
       }
 
       state.selectedRound = cloneDeep(round);
-      el.scorecardTitle.textContent = `Scorekort – ${round.player_name}`;
+
+      el.scorecardTitle.textContent = `Scorekort – ${round.player_name || 'Ukjent spiller'}`;
+
       renderScorecardMeta(state.selectedRound);
       renderScoreSummary(state.selectedRound);
       renderScorecardTable();
+
       el.scorecardDialog.showModal();
     }
 
     async function saveScorecard(){
       const round = state.selectedRound;
+
       if(!round){
         showToast('Ingen runde valgt.');
         return;
@@ -921,7 +1206,9 @@
 
       el.scorecardDialog.close();
       state.selectedRound = null;
+
       await refreshRounds();
+
       showToast('Scorekortet er oppdatert.');
     }
 
@@ -939,12 +1226,15 @@
       }
 
       await refreshRounds();
+
       showToast('Runden er slettet.');
     }
 
     async function logout(){
       await supabaseClient.auth.signOut();
+
       showToast('Logget ut.');
+
       setTimeout(() => {
         window.location.href = 'index.html';
       }, 500);
@@ -953,8 +1243,12 @@
     function showToast(message){
       el.toast.textContent = message;
       el.toast.classList.add('show');
+
       clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(() => el.toast.classList.remove('show'), 2200);
+
+      showToast._timer = setTimeout(() => {
+        el.toast.classList.remove('show');
+      }, 2200);
     }
 
     el.logoutBtn.addEventListener('click', async (e) => {
