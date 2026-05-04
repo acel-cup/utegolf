@@ -806,63 +806,100 @@
       return String(Math.round(n));
     }
 
-    function renderControlWarnings(round){
-      const tee = getTeeValue(round);
-      const playingHandicap = getPlayingHandicapValue(round);
-      const receivedStrokes = sumReceivedStrokes(round);
+function renderControlWarnings(round){
+  const tee = getTeeValue(round);
+  const playingHandicap = getPlayingHandicapValue(round);
+  const playedHoles = getPlayedHoles(round);
+  const holesPlayed = playedHoles.length;
+  const receivedStrokes = sumReceivedStrokes(round);
 
-      const phcpNumber = Number(playingHandicap);
-      const hasPhcp = Number.isFinite(phcpNumber);
-      const phcpMatchesHoleData = hasPhcp ? Math.round(phcpNumber) === Math.round(receivedStrokes) : null;
+  const phcpNumber = Number(playingHandicap);
+  const hasPhcp = Number.isFinite(phcpNumber);
 
-      const warnings = [];
+  const isNineHoleRound = holesPlayed > 0 && holesPlayed < 18;
+  const expectedNineHoleLow = hasPhcp ? Math.floor(phcpNumber / 2) : null;
+  const expectedNineHoleHigh = hasPhcp ? Math.ceil(phcpNumber / 2) : null;
 
-      if(tee === '—'){
-        warnings.push(`
-          <div class="warning-box warn">
-            <strong>Teested mangler</strong>
-            Runden har ikke lagret teested/utslag. Da kan du ikke kontrollere sikkert om spilleren har valgt riktig tee mot Golfbox.
-          </div>
-        `);
-      } else {
-        warnings.push(`
-          <div class="warning-box ok">
-            <strong>Teested registrert</strong>
-            Sjekk at Golfbox viser samme teested som her: ${escapeHtml(tee)}.
-          </div>
-        `);
-      }
+  const warnings = [];
 
-      if(hasPhcp && !phcpMatchesHoleData){
-        warnings.push(`
-          <div class="warning-box warn">
-            <strong>PHCP stemmer ikke med hull-data</strong>
-            Lagret PHCP er ${escapeHtml(playingHandicap)}, men hullene har totalt ${receivedStrokes} tildelte slag.
-            Dette kan tyde på feil teested, feil format eller feil handicapgrunnlag.
-          </div>
-        `);
-      }
+  if(tee === '—'){
+    warnings.push(`
+      <div class="warning-box warn">
+        <strong>Teested mangler</strong>
+        Runden har ikke lagret teested/utslag. Da kan du ikke kontrollere sikkert om spilleren har valgt riktig tee mot Golfbox.
+      </div>
+    `);
+  } else {
+    warnings.push(`
+      <div class="warning-box ok">
+        <strong>Teested registrert</strong>
+        Sjekk at Golfbox viser samme teested som her: ${escapeHtml(tee)}.
+      </div>
+    `);
+  }
 
-      if(hasPhcp && phcpMatchesHoleData){
-        warnings.push(`
-          <div class="warning-box ok">
-            <strong>PHCP-kontroll</strong>
-            Lagret PHCP stemmer med tildelte slag i scorekortet: ${receivedStrokes}.
-          </div>
-        `);
-      }
+  if(!hasPhcp){
+    warnings.push(`
+      <div class="warning-box warn">
+        <strong>PHCP mangler</strong>
+        Runden mangler lagret spille-HCP. Kontroller ekstra nøye mot Golfbox.
+      </div>
+    `);
 
-      if(!hasPhcp){
-        warnings.push(`
-          <div class="warning-box warn">
-            <strong>PHCP mangler</strong>
-            Runden mangler lagret spille-HCP. Kontroller ekstra nøye mot Golfbox.
-          </div>
-        `);
-      }
+    el.scorecardWarnings.innerHTML = warnings.join('');
+    return;
+  }
 
-      el.scorecardWarnings.innerHTML = warnings.join('');
+  if(isNineHoleRound){
+    const nineHoleLooksOk =
+      receivedStrokes === expectedNineHoleLow ||
+      receivedStrokes === expectedNineHoleHigh ||
+      Math.abs(receivedStrokes - (phcpNumber / 2)) <= 1;
+
+    if(nineHoleLooksOk){
+      warnings.push(`
+        <div class="warning-box ok">
+          <strong>9-hulls PHCP-kontroll</strong>
+          Runden er registrert med ${holesPlayed} hull. Lagret PHCP er ${escapeHtml(playingHandicap)} for full runde,
+          og scorekortet har ${receivedStrokes} tildelte slag. Dette ser normalt ut for en 9-hulls runde.
+        </div>
+      `);
+    } else {
+      warnings.push(`
+        <div class="warning-box warn">
+          <strong>Mulig avvik i 9-hulls PHCP</strong>
+          Runden er registrert med ${holesPlayed} hull. Lagret PHCP er ${escapeHtml(playingHandicap)}, mens scorekortet har ${receivedStrokes} tildelte slag.
+          For en 9-hulls runde forventes normalt cirka ${expectedNineHoleLow}–${expectedNineHoleHigh} slag.
+          Kontroller teested, format og Golfbox.
+        </div>
+      `);
     }
+
+    el.scorecardWarnings.innerHTML = warnings.join('');
+    return;
+  }
+
+  const phcpMatchesHoleData = Math.round(phcpNumber) === Math.round(receivedStrokes);
+
+  if(phcpMatchesHoleData){
+    warnings.push(`
+      <div class="warning-box ok">
+        <strong>PHCP-kontroll</strong>
+        Lagret PHCP stemmer med tildelte slag i scorekortet: ${receivedStrokes}.
+      </div>
+    `);
+  } else {
+    warnings.push(`
+      <div class="warning-box warn">
+        <strong>PHCP stemmer ikke med hull-data</strong>
+        Lagret PHCP er ${escapeHtml(playingHandicap)}, men hullene har totalt ${receivedStrokes} tildelte slag.
+        Dette kan tyde på feil teested, feil format eller feil handicapgrunnlag.
+      </div>
+    `);
+  }
+
+  el.scorecardWarnings.innerHTML = warnings.join('');
+}
 
     function recalculateRound(round){
       const holes = Array.isArray(round.hole_breakdown) ? round.hole_breakdown : [];
