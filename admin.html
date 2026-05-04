@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ACEL CUP</title>
@@ -155,9 +154,23 @@
       margin:0;
     }
 
+    .scorecard-control-note{
+      margin:0 0 1rem;
+      padding:.9rem 1rem;
+      background:#fffdf8;
+      border:1px solid rgba(199,163,91,.38);
+      border-left:5px solid var(--gold);
+      border-radius:8px;
+      color:#31443a;
+    }
+
+    .scorecard-control-note strong{
+      color:var(--green);
+    }
+
     .scorecard-meta{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
+      grid-template-columns:repeat(5,1fr);
       gap:12px;
       margin-bottom:1rem;
     }
@@ -167,6 +180,7 @@
       border:1px solid rgba(199,163,91,.35);
       border-radius:8px;
       padding:.8rem .9rem;
+      min-height:74px;
     }
 
     .meta-box strong{
@@ -176,6 +190,25 @@
       margin-bottom:.2rem;
       text-transform:uppercase;
       letter-spacing:.03em;
+    }
+
+    .meta-box span{
+      display:block;
+      font-weight:700;
+      color:var(--green);
+    }
+
+    .meta-box.highlight{
+      background:#f4ecdb;
+      border-color:rgba(199,163,91,.58);
+    }
+
+    .proof-link{
+      display:inline-block;
+      font-weight:700;
+      color:var(--green);
+      text-decoration:underline;
+      text-underline-offset:3px;
     }
 
     .score-summary{
@@ -274,7 +307,8 @@
 
     @media (max-width:1100px){
       .controls{grid-template-columns:1fr 1fr}
-      .scorecard-meta,.score-summary{grid-template-columns:1fr 1fr}
+      .scorecard-meta{grid-template-columns:1fr 1fr}
+      .score-summary{grid-template-columns:1fr 1fr}
     }
 
     @media (max-width:700px){
@@ -390,6 +424,11 @@
       </div>
 
       <div class="modal-body">
+        <div class="scorecard-control-note">
+          <strong>Kontroll mot Golfbox:</strong>
+          Sjekk bane, tee, handicap, spille-HCP, format og markør før du godkjenner eller redigerer runden.
+        </div>
+
         <div class="scorecard-meta" id="scorecardMeta"></div>
 
         <p class="help-text">
@@ -473,6 +512,22 @@
     [el.filterCourse, el.filterPlayer, el.filterMonth, el.filterFormat, el.sortRounds]
       .forEach(node => node.addEventListener('change', renderRoundsTable));
 
+    function escapeHtml(value){
+      return String(value ?? '—')
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#039;");
+    }
+
+    function firstValue(...values){
+      for(const value of values){
+        if(value !== undefined && value !== null && value !== '') return value;
+      }
+      return '—';
+    }
+
     function formatMonthKey(key){
       if(!key) return '—';
       const [y,m] = key.split('-');
@@ -480,19 +535,38 @@
     }
 
     function formatDate(dateStr){
+      if(!dateStr) return '—';
       const [y,m,d] = dateStr.split('-');
       return `${d}.${m}.${y}`;
     }
 
+    function formatDateTime(value){
+      if(!value) return '—';
+      const date = new Date(value);
+      if(Number.isNaN(date.getTime())) return '—';
+      return date.toLocaleString('no-NO', {
+        day:'2-digit',
+        month:'2-digit',
+        year:'numeric',
+        hour:'2-digit',
+        minute:'2-digit'
+      });
+    }
+
     function scoreText(v){
-      return v < 0 ? String(v) : v > 0 ? `+${v}` : 'E';
+      const n = Number(v);
+      if(!Number.isFinite(n)) return '—';
+      return n < 0 ? String(n) : n > 0 ? `+${n}` : 'E';
     }
 
     function scoreHtml(v){
-      return v < 0
-        ? `<span style="color:#216b49;font-weight:700">${v}</span>`
-        : v > 0
-          ? `<span style="color:#9a2b2b;font-weight:700">+${v}</span>`
+      const n = Number(v);
+      if(!Number.isFinite(n)) return '—';
+
+      return n < 0
+        ? `<span style="color:#216b49;font-weight:700">${n}</span>`
+        : n > 0
+          ? `<span style="color:#9a2b2b;font-weight:700">+${n}</span>`
           : `<span style="color:#8c6d31;font-weight:700">E</span>`;
     }
 
@@ -529,6 +603,16 @@
 
     function cloneDeep(obj){
       return JSON.parse(JSON.stringify(obj));
+    }
+
+    function getProofUrl(round){
+      return firstValue(
+        round.scorecard_url,
+        round.screenshot_url,
+        round.image_url,
+        round.proof_url,
+        round.golfbox_screenshot_url
+      );
     }
 
     function recalculateRound(round){
@@ -638,11 +722,35 @@
     }
 
     function renderScorecardMeta(round){
+      const tee = firstValue(round.tee, round.tee_name, round.tee_color);
+      const handicapIndex = firstValue(round.handicap_index, round.handicap, round.hcp);
+      const playingHandicap = firstValue(round.playing_handicap, round.playing_hcp, round.course_hcp, round.strokes_received);
+      const marker = firstValue(round.marker, round.markor, round.marker_name);
+      const holes = Array.isArray(round.hole_breakdown) ? round.hole_breakdown.filter(h => h.played !== false).length : '—';
+      const proofUrl = getProofUrl(round);
+
       el.scorecardMeta.innerHTML = `
-        <div class="meta-box"><strong>Spiller</strong>${round.player_name || '—'}</div>
-        <div class="meta-box"><strong>Dato</strong>${formatDate(round.date)}</div>
-        <div class="meta-box"><strong>Bane</strong>${round.course || '—'}</div>
-        <div class="meta-box"><strong>Format</strong>${getFormatLabel(round.format)}</div>
+        <div class="meta-box highlight"><strong>Bane</strong><span>${escapeHtml(round.course)}</span></div>
+        <div class="meta-box highlight"><strong>Tee / utslag</strong><span>${escapeHtml(tee)}</span></div>
+        <div class="meta-box highlight"><strong>Spiller-HCP</strong><span>${escapeHtml(handicapIndex)}</span></div>
+        <div class="meta-box highlight"><strong>Spille-HCP / PHCP</strong><span>${escapeHtml(playingHandicap)}</span></div>
+        <div class="meta-box"><strong>Format</strong><span>${escapeHtml(getFormatLabel(round.format))}</span></div>
+
+        <div class="meta-box"><strong>Spiller</strong><span>${escapeHtml(round.player_name)}</span></div>
+        <div class="meta-box"><strong>Dato</strong><span>${escapeHtml(formatDate(round.date))}</span></div>
+        <div class="meta-box"><strong>Markør</strong><span>${escapeHtml(marker)}</span></div>
+        <div class="meta-box"><strong>Hull registrert</strong><span>${escapeHtml(holes)}</span></div>
+        <div class="meta-box"><strong>Måned</strong><span>${escapeHtml(formatMonthKey(round.month_key))}</span></div>
+
+        <div class="meta-box"><strong>Registrert</strong><span>${escapeHtml(formatDateTime(round.created_at))}</span></div>
+        <div class="meta-box"><strong>Lagret brutto</strong><span>${escapeHtml(firstValue(round.gross_total))}</span></div>
+        <div class="meta-box"><strong>Lagret netto</strong><span>${escapeHtml(firstValue(round.net_total))}</span></div>
+        <div class="meta-box"><strong>Lagret score</strong><span>${scoreHtml(round.score_relative)}</span></div>
+        <div class="meta-box"><strong>Golfbox-bilde</strong><span>${
+          proofUrl === '—'
+            ? '—'
+            : `<a class="proof-link" href="${escapeHtml(proofUrl)}" target="_blank" rel="noopener">Åpne</a>`
+        }</span></div>
       `;
     }
 
@@ -734,16 +842,16 @@
             <tr>
               <td>${formatDate(r.date)}</td>
               <td>${formatMonthKey(r.month_key)}</td>
-              <td>${r.player_name}</td>
-              <td>${r.marker || '—'}</td>
-              <td>${r.course}</td>
-              <td>${r.tee || '—'}</td>
+              <td>${escapeHtml(r.player_name)}</td>
+              <td>${escapeHtml(r.marker || '—')}</td>
+              <td>${escapeHtml(r.course)}</td>
+              <td>${escapeHtml(r.tee || '—')}</td>
               <td>${getFormatLabel(r.format)}</td>
               <td>${Number(r.handicap_index || 0).toFixed(1)}</td>
-              <td>${r.playing_handicap ?? '—'}</td>
-              <td>${r.gross_total ?? '—'}</td>
-              <td>${r.net_total ?? '—'}</td>
-              <td>${scoreHtml(r.score_relative ?? 0)}</td>
+              <td>${escapeHtml(r.playing_handicap ?? '—')}</td>
+              <td>${escapeHtml(r.gross_total ?? '—')}</td>
+              <td>${escapeHtml(r.net_total ?? '—')}</td>
+              <td>${scoreHtml(r.score_relative)}</td>
               <td>
                 <div class="actions">
                   <button type="button" data-view="${r.id}" class="btn-small">Vis</button>
