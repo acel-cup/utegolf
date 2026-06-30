@@ -690,7 +690,7 @@
             <h3 class="panel-title">Leaderboard måned</h3>
             <div class="panel-title-rule"></div>
             <p class="panel-subtitle">
-              Her vises alle spillere med registrerte runder i inneværende måned. Tabellen viser hver spillers beste runde denne måneden, med netto score og bane.
+              Her vises alle spillere med registrerte runder i inneværende måned. Tabellen viser hver spillers beste runde denne måneden, med netto score og bane. Ved lik netto score rangeres lavest handicap på den tellende runden først.
             </p>
             <div class="month-chip" id="currentMonthLabel">Inneværende måned</div>
 
@@ -916,17 +916,57 @@
       return rank <= 10 ? (POINTS_BY_RANK[rank] || 20) : 20;
     }
 
+    function numericValue(value, fallback = Number.POSITIVE_INFINITY){
+      const number = Number(value);
+      return Number.isFinite(number) ? number : fallback;
+    }
+
+    function roundHandicap(round){
+      return numericValue(round.handicap_index);
+    }
+
+    function compareMonthlyRounds(a, b){
+      return (
+        numericValue(a.score_relative) - numericValue(b.score_relative) ||
+        roundHandicap(a) - roundHandicap(b) ||
+        numericValue(a.net_total) - numericValue(b.net_total) ||
+        (a.date || '').localeCompare(b.date || '') ||
+        (a.player_name || '').localeCompare(b.player_name || '', 'no')
+      );
+    }
+
+    function applyMonthlyRanking(list){
+      let rank = 0;
+      let seen = 0;
+      let previousScore = null;
+      let previousHandicap = null;
+
+      return list.map(item => {
+        seen += 1;
+
+        const score = numericValue(item.score_relative);
+        const handicap = roundHandicap(item);
+
+        if(
+          previousScore === null ||
+          score !== previousScore ||
+          handicap !== previousHandicap
+        ){
+          rank = seen;
+          previousScore = score;
+          previousHandicap = handicap;
+        }
+
+        return { ...item, rank };
+      });
+    }
+
     function getMonthlyRanking(rounds, monthKey){
       const filtered = rounds
         .filter(r => r.month_key === monthKey)
-        .sort((a,b) =>
-          a.score_relative - b.score_relative ||
-          a.net_total - b.net_total ||
-          a.date.localeCompare(b.date) ||
-          a.player_name.localeCompare(b.player_name, 'no')
-        );
+        .sort(compareMonthlyRounds);
 
-      return applyCompetitionRanking(filtered, item => item.score_relative);
+      return applyMonthlyRanking(filtered);
     }
 
     function getBestRoundsPerPlayerPerCourse(rounds){
@@ -1011,24 +1051,14 @@
       for(const round of filtered){
         const current = bestByPlayer.get(round.player_id);
 
-        if(
-          !current ||
-          round.score_relative < current.score_relative ||
-          (round.score_relative === current.score_relative && round.net_total < current.net_total) ||
-          (round.score_relative === current.score_relative && round.net_total === current.net_total && round.date < current.date)
-        ){
+        if(!current || compareMonthlyRounds(round, current) < 0){
           bestByPlayer.set(round.player_id, round);
         }
       }
 
-      const rows = [...bestByPlayer.values()].sort((a,b) =>
-        a.score_relative - b.score_relative ||
-        a.net_total - b.net_total ||
-        a.date.localeCompare(b.date) ||
-        a.player_name.localeCompare(b.player_name, 'no')
-      );
+      const rows = [...bestByPlayer.values()].sort(compareMonthlyRounds);
 
-      return applyCompetitionRanking(rows, item => item.score_relative);
+      return applyMonthlyRanking(rows);
     }
 
     function getPastMonthlyWinners(rounds){
