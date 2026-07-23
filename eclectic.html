@@ -261,27 +261,27 @@
       background:#f3eddf;
     }
 
-    .eclectic-table th:first-child,
-    .eclectic-table td:first-child{
-      position:sticky;
-      left:0;
-      z-index:3;
-    }
+.eclectic-table thead tr:first-child > th:first-child,
+.eclectic-table tbody tr > td:first-child{
+  position:sticky;
+  left:0;
+  z-index:3;
+}
 
-    .eclectic-table th:nth-child(2),
-    .eclectic-table td:nth-child(2){
-      position:sticky;
-      left:64px;
-      z-index:3;
-      min-width:210px;
-      text-align:left;
-    }
+.eclectic-table thead tr:first-child > th:nth-child(2),
+.eclectic-table tbody tr > td:nth-child(2){
+  position:sticky;
+  left:64px;
+  z-index:3;
+  min-width:210px;
+  text-align:left;
+}
 
-    .eclectic-table thead th:first-child,
-    .eclectic-table thead th:nth-child(2){
-      z-index:6;
-      background:#184434;
-    }
+.eclectic-table thead tr:first-child > th:first-child,
+.eclectic-table thead tr:first-child > th:nth-child(2){
+  z-index:6;
+  background:#184434;
+}
 
     .eclectic-table thead tr.par-row th:first-child,
     .eclectic-table thead tr.par-row th:nth-child(2){
