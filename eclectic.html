@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Eclectic-resultater for Solnør GK i ACEL CUP">
+  <title>Eclectic – ACEL CUP</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "w4szteilw2");
+  </script>
+
+  <style>
+    :root{
+      --nav:#163949;
+      --nav2:#224b5d;
+      --green:#173f31;
+      --green2:#245746;
+      --green3:#1d4c3b;
+      --green4:#133729;
+      --gold:#c7a35b;
+      --gold-soft:#dcc28e;
+      --paper:#f3efe6;
+      --paper2:#fbf8f1;
+      --paper3:#f6f1e7;
+      --line:#d8c8a3;
+      --ink:#24342d;
+      --muted:#6d6a62;
+      --red:#9a2b2b;
+      --shadow:0 14px 30px rgba(33,33,24,.12);
+      --deep-shadow:0 18px 34px rgba(21,52,38,.18);
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{
+      margin:0;
+      padding:0;
+      min-height:100%;
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,0) 24%),
+        var(--paper);
+      color:var(--ink);
+    }
+
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    }
+
+    nav.container-fluid{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:linear-gradient(180deg,var(--nav2),var(--nav));
+      border-bottom:3px solid var(--gold);
+      padding:.65rem 1.5rem;
+      box-shadow:0 4px 18px rgba(0,0,0,.12);
+    }
+
+    .font-normal{font-weight:normal}
+
+    nav strong{
+      font-family:Impact,"Arial Narrow",Arial,sans-serif;
+      font-size:2.05rem;
+      letter-spacing:.02em;
+      font-weight:700;
+    }
+
+    nav a{
+      color:#f6f2e8 !important;
+      font-weight:700;
+      text-decoration:none;
+    }
+
+    nav a[aria-current="page"]{
+      color:#fff !important;
+      text-decoration:underline;
+      text-decoration-color:var(--gold);
+      text-decoration-thickness:3px;
+      text-underline-offset:.42rem;
+    }
+
+    nav [role=button]{
+      background:transparent;
+      border:1px solid rgba(255,255,255,.34);
+      color:#f6f2e8;
+      padding:.45rem .95rem;
+      border-radius:2px;
+    }
+
+    main.container{
+      max-width:1560px;
+      padding-top:0;
+      padding-bottom:1.8rem;
+    }
+
+    .hero-shell{
+      background:#e6decc;
+      border-bottom:1px solid rgba(199,163,91,.38);
+      box-shadow:inset 0 -24px 28px rgba(0,0,0,.04);
+    }
+
+    .hero-img{
+      width:100%;
+      display:block;
+      aspect-ratio:16/6.2;
+      object-fit:cover;
+      object-position:center 42%;
+    }
+
+    .content-wrap{
+      padding:18px 18px 0;
+    }
+
+    .section-card{
+      background:linear-gradient(180deg,#fcfaf4,#f3ecde);
+      border:1px solid var(--line);
+      border-radius:8px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .section-card::before{
+      content:"";
+      position:absolute;
+      inset:14px;
+      border:1px solid rgba(199,163,91,.16);
+      border-radius:6px;
+      pointer-events:none;
+    }
+
+    .section-inner{
+      padding:24px 22px 22px;
+      position:relative;
+      z-index:1;
+    }
+
+    .title-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+
+    .section-title{
+      font-family:Georgia,"Times New Roman",serif;
+      color:#183b30;
+      margin:0;
+      font-size:2.15rem;
+      line-height:1.08;
+    }
+
+    .section-rule{
+      width:100%;
+      height:1px;
+      background:rgba(199,163,91,.34);
+      margin:14px 0 16px;
+    }
+
+    .intro{
+      max-width:70rem;
+      margin:0;
+      color:#5f615b;
+      line-height:1.6;
+    }
+
+    .status-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:18px 0 16px;
+    }
+
+    .status-chip{
+      display:inline-flex;
+      align-items:center;
+      min-height:34px;
+      padding:.34rem .72rem;
+      border:1px solid rgba(199,163,91,.38);
+      border-radius:999px;
+      background:#efe5d1;
+      color:#27453a;
+      font-size:.92rem;
+      font-weight:700;
+    }
+
+    .rules-box{
+      margin:16px 0 20px;
+      padding:14px 16px;
+      border-left:4px solid var(--gold);
+      border-radius:4px;
+      background:rgba(255,255,255,.48);
+      color:#4f5a52;
+    }
+
+    .rules-box strong{
+      color:var(--green);
+    }
+
+    .table-shell{
+      overflow:auto;
+      border:1px solid rgba(199,163,91,.34);
+      border-radius:8px;
+      background:#fbf8f1;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.45);
+    }
+
+    .eclectic-table{
+      width:100%;
+      min-width:1500px;
+      margin:0;
+      border-collapse:separate;
+      border-spacing:0;
+      font-variant-numeric:tabular-nums;
+    }
+
+    .eclectic-table th,
+    .eclectic-table td{
+      text-align:center;
+      white-space:nowrap;
+      border-right:1px solid #d6ccb9;
+      border-bottom:1px solid #d6ccb9;
+    }
+
+    .eclectic-table thead th{
+      position:sticky;
+      top:0;
+      z-index:4;
+      padding:.73rem .52rem;
+      background:#1f5d47;
+      color:#f8f4ea;
+      font-weight:700;
+      font-size:.91rem;
+    }
+
+    .eclectic-table thead tr.par-row th{
+      padding:.42rem .52rem;
+      background:#173f31;
+      color:#dccda9;
+      font-size:.78rem;
+      font-weight:600;
+    }
+
+    .eclectic-table tbody td{
+      padding:.74rem .52rem;
+      background:#fbf8f1;
+      color:#22342e;
+      font-size:.94rem;
+    }
+
+    .eclectic-table tbody tr:nth-child(even) td{
+      background:#f3eddf;
+    }
+
+    .eclectic-table th:first-child,
+    .eclectic-table td:first-child{
+      position:sticky;
+      left:0;
+      z-index:3;
+    }
+
+    .eclectic-table th:nth-child(2),
+    .eclectic-table td:nth-child(2){
+      position:sticky;
+      left:64px;
+      z-index:3;
+      min-width:210px;
+      text-align:left;
+    }
+
+    .eclectic-table thead th:first-child,
+    .eclectic-table thead th:nth-child(2){
+      z-index:6;
+      background:#184434;
+    }
+
+    .eclectic-table thead tr.par-row th:first-child,
+    .eclectic-table thead tr.par-row th:nth-child(2){
+      background:#133729;
+    }
+
+    .eclectic-table tbody tr:nth-child(odd) td:first-child,
+    .eclectic-table tbody tr:nth-child(odd) td:nth-child(2){
+      background:#fbf8f1;
+    }
+
+    .eclectic-table tbody tr:nth-child(even) td:first-child,
+    .eclectic-table tbody tr:nth-child(even) td:nth-child(2){
+      background:#f3eddf;
+    }
+
+    .eclectic-table .position{
+      width:64px;
+      min-width:64px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.45rem;
+      font-weight:700;
+      color:var(--green);
+    }
+
+    .eclectic-table .player-name{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.03rem;
+      font-weight:700;
+      color:#173d2f;
+    }
+
+    .eclectic-table .divider-left{
+      border-left:3px solid var(--gold);
+    }
+
+    .eclectic-table .subtotal{
+      min-width:58px;
+      background:#eee3ce !important;
+      font-weight:800;
+      color:#173f31;
+    }
+
+    .eclectic-table .total{
+      min-width:68px;
+      background:#e3d3ad !important;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.35rem;
+      font-weight:800;
+      color:#173f31;
+    }
+
+    .eclectic-table .relative{
+      min-width:60px;
+      font-size:1.05rem;
+      font-weight:800;
+    }
+
+    .eclectic-table .qualification{
+      min-width:105px;
+      color:#4f5a52;
+      font-size:.86rem;
+      font-weight:700;
+    }
+
+    .score-cell{
+      min-width:45px;
+      font-weight:700;
+    }
+
+    .score-eagle{
+      background:#cfe1d4 !important;
+      color:#103b29 !important;
+      box-shadow:inset 0 0 0 2px #2d6d50;
+    }
+
+    .score-birdie{
+      background:#e2ecdf !important;
+      color:#174a32 !important;
+      box-shadow:inset 0 0 0 1px #5e8b72;
+    }
+
+    .score-bogey{
+      background:#f3dfd7 !important;
+      color:#7c3328 !important;
+      box-shadow:inset 0 0 0 1px #b87a6d;
+    }
+
+    .score-double{
+      background:#ead0c8 !important;
+      color:#77271e !important;
+      box-shadow:inset 0 0 0 2px #9a4b3f;
+    }
+
+    .under{color:#12613f}
+    .over{color:#9a2b2b}
+    .even{color:#394b43}
+
+    .message{
+      padding:28px 18px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    .message.error{
+      color:var(--red);
+    }
+
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-top:14px;
+      color:#5f615b;
+      font-size:.85rem;
+    }
+
+    .legend-item{
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+    }
+
+    .legend-swatch{
+      width:19px;
+      height:19px;
+      border-radius:3px;
+      border:1px solid rgba(0,0,0,.14);
+    }
+
+    .footer-band{
+      margin-top:18px;
+      background:linear-gradient(180deg,#234c3d,#17384a);
+      color:#f2ede1;
+      border-top:2px solid var(--gold);
+      padding:18px 16px;
+      text-align:center;
+    }
+
+    .footer-band a{
+      color:#f2ede1;
+      text-decoration:none;
+      margin:0 10px;
+      font-weight:600;
+    }
+
+    @media (max-width:900px){
+      nav.container-fluid{
+        padding:.6rem 1rem;
+      }
+
+      nav strong{
+        font-size:1.7rem;
+      }
+
+      .hero-img{
+        aspect-ratio:16/8.2;
+      }
+
+      .content-wrap{
+        padding:14px 12px 0;
+      }
+
+      .section-inner{
+        padding:20px 16px 18px;
+      }
+
+      .section-title{
+        font-size:1.75rem;
+      }
+
+      .eclectic-table th:nth-child(2),
+      .eclectic-table td:nth-child(2){
+        min-width:170px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="container-fluid">
+    <ul>
+      <li>
+        <strong class="font-normal">
+          <span style="color:#E30613">ACEL</span>
+          <span style="color:#020A3A">CUP</span>
+        </strong>
+      </li>
+    </ul>
+
+    <ul>
+      <li><a href="index.html">Leaderboard</a></li>
+      <li><a href="eclectic.html" aria-current="page">Eclectic</a></li>
+      <li><a href="register.html">Registrer Runde</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="admin.html">Admin</a></li>
+      <li><a href="register.html#auth" role="button">Logg inn</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <div class="hero-shell">
+      <img class="hero-img" src="herobilde.png" alt="ACEL CUP hero">
+    </div>
+
+    <div class="content-wrap">
+      <section class="section-card" aria-labelledby="eclecticTitle">
+        <div class="section-inner">
+          <div class="title-row">
+            <div>
+              <h1 class="section-title" id="eclecticTitle">Eclectic – Solnør GK</h1>
+            </div>
+          </div>
+
+          <div class="section-rule"></div>
+
+          <p class="intro">
+            Hver spillers beste registrerte bruttoscore på hvert hull settes sammen til én
+            eclectic-runde. Resultatet oppdateres automatisk når nye Solnør-runder registreres.
+          </p>
+
+          <div class="rules-box">
+            <strong>Krav for å bli vist:</strong>
+            Spilleren må ha én komplett runde på hull 1–18, eller minst én komplett runde på
+            hull 1–9 og én komplett runde på hull 10–18. En runde eller halvdel med manglende
+            hullscore blir ikke brukt.
+          </div>
+
+          <div class="status-row" aria-live="polite">
+            <span class="status-chip">Solnør GK</span>
+            <span class="status-chip">Par 72</span>
+            <span class="status-chip" id="qualifiedCount">Kvalifiserte spillere: –</span>
+            <span class="status-chip" id="validRoundsCount">Gyldige runder: –</span>
+          </div>
+
+          <div class="table-shell">
+            <table class="eclectic-table" id="eclecticTable">
+              <thead id="eclecticHead"></thead>
+              <tbody id="eclecticBody">
+                <tr>
+                  <td colspan="25" class="message">Laster eclectic-resultater …</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="legend" aria-label="Forklaring av hullfarger">
+            <span class="legend-item">
+              <span class="legend-swatch score-eagle"></span>
+              Eagle eller bedre
+            </span>
+            <span class="legend-item">
+              <span class="legend-swatch score-birdie"></span>
+              Birdie
+            </span>
+            <span class="legend-item">
+              <span class="legend-swatch score-bogey"></span>
+              Bogey
+            </span>
+            <span class="legend-item">
+              <span class="legend-swatch score-double"></span>
+              Dobbelbogey eller høyere
+            </span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer-band">
+      <a href="regler.html">Regler</a> |
+      <a href="kontakt.html">Kontakt</a> |
+      <a href="personvern.html">Personvern</a>
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL = 'https://geduwhzlwdphouslxhsd.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_W8nt1u4S9htR3Zlz8-8SDA__cvNb_jG';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const COURSE_NAME = 'Solnør GK';
+    const HOLES = Array.from({ length: 18 }, (_, index) => index + 1);
+    const FRONT_HOLES = HOLES.filter(hole => hole <= 9);
+    const BACK_HOLES = HOLES.filter(hole => hole >= 10);
+
+    const PAR_BY_HOLE = {
+      1:4, 2:5, 3:3, 4:5, 5:4, 6:4, 7:4, 8:4, 9:3,
+      10:4, 11:5, 12:3, 13:4, 14:5, 15:3, 16:4, 17:4, 18:4
+    };
+
+    const COURSE_PAR = HOLES.reduce((sum, hole) => sum + PAR_BY_HOLE[hole], 0);
+
+    const el = {
+      head: document.getElementById('eclecticHead'),
+      body: document.getElementById('eclecticBody'),
+      qualifiedCount: document.getElementById('qualifiedCount'),
+      validRoundsCount: document.getElementById('validRoundsCount')
+    };
+
+    function escapeHtml(value){
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function normalizeFormat(value){
+      const format = String(value ?? '').trim().toLowerCase();
+
+      if(['full', '18', 'full 18', '1-18'].includes(format)) return 'full';
+      if(['front', 'front 9', '1-9'].includes(format)) return 'front';
+      if(['back', 'back 9', '10-18'].includes(format)) return 'back';
+
+      return format;
+    }
+
+    function normalizeHoleBreakdown(value){
+      let breakdown = value;
+
+      if(typeof breakdown === 'string'){
+        try{
+          breakdown = JSON.parse(breakdown);
+        } catch{
+          return [];
+        }
+      }
+
+      if(Array.isArray(breakdown)) return breakdown;
+      if(breakdown && typeof breakdown === 'object') return Object.values(breakdown);
+
+      return [];
+    }
+
+    function getGrossValue(holeData){
+      const candidates = [
+        holeData?.grossInput,
+        holeData?.gross_input,
+        holeData?.gross,
+        holeData?.strokes,
+        holeData?.score
+      ];
+
+      for(const candidate of candidates){
+        if(candidate === null || candidate === undefined || candidate === '') continue;
+        const value = Number(candidate);
+        if(Number.isFinite(value) && value >= 1) return value;
+      }
+
+      return null;
+    }
+
+    function extractPlayedScores(round){
+      const scores = new Map();
+
+      for(const item of normalizeHoleBreakdown(round.hole_breakdown)){
+        const hole = Number(item?.hole ?? item?.holeNumber ?? item?.hole_number);
+        const gross = getGrossValue(item);
+        const explicitlyNotPlayed = item?.played === false;
+
+        if(
+          Number.isInteger(hole) &&
+          hole >= 1 &&
+          hole <= 18 &&
+          !explicitlyNotPlayed &&
+          gross !== null
+        ){
+          scores.set(hole, gross);
+        }
+      }
+
+      return scores;
+    }
+
+    function containsAll(scores, holes){
+      return holes.every(hole => scores.has(hole));
+    }
+
+    function getValidRoundSegments(round){
+      const scores = extractPlayedScores(round);
+      const format = normalizeFormat(round.format);
+      const frontComplete = containsAll(scores, FRONT_HOLES);
+      const backComplete = containsAll(scores, BACK_HOLES);
+      const fullComplete = frontComplete && backComplete;
+
+      if(format === 'full'){
+        return fullComplete ? [{ type:'full', holes:HOLES, scores }] : [];
+      }
+
+      if(format === 'front'){
+        return frontComplete ? [{ type:'front', holes:FRONT_HOLES, scores }] : [];
+      }
+
+      if(format === 'back'){
+        return backComplete ? [{ type:'back', holes:BACK_HOLES, scores }] : [];
+      }
+
+      // Eldre data uten et kjent format tolkes kun ut fra faktisk registrerte hull.
+      if(fullComplete) return [{ type:'full', holes:HOLES, scores }];
+      if(frontComplete && !backComplete) return [{ type:'front', holes:FRONT_HOLES, scores }];
+      if(backComplete && !frontComplete) return [{ type:'back', holes:BACK_HOLES, scores }];
+
+      return [];
+    }
+
+    function playerKey(round){
+      if(round.player_id !== null && round.player_id !== undefined && round.player_id !== ''){
+        return `id:${round.player_id}`;
+      }
+
+      return `name:${String(round.player_name ?? '').trim().toLocaleLowerCase('nb-NO')}`;
+    }
+
+    function buildEclecticRows(rounds){
+      const players = new Map();
+      let validRoundCount = 0;
+
+      for(const round of rounds){
+        const segments = getValidRoundSegments(round);
+        if(segments.length === 0) continue;
+
+        validRoundCount += 1;
+
+        const key = playerKey(round);
+        if(!players.has(key)){
+          players.set(key, {
+            key,
+            playerId: round.player_id ?? null,
+            name: String(round.player_name ?? 'Ukjent spiller').trim(),
+            bestByHole: new Map(),
+            hasFull: false,
+            hasFront: false,
+            hasBack: false,
+            validRoundCount: 0
+          });
+        }
+
+        const player = players.get(key);
+        player.validRoundCount += 1;
+
+        for(const segment of segments){
+          if(segment.type === 'full'){
+            player.hasFull = true;
+            player.hasFront = true;
+            player.hasBack = true;
+          } else if(segment.type === 'front'){
+            player.hasFront = true;
+          } else if(segment.type === 'back'){
+            player.hasBack = true;
+          }
+
+          for(const hole of segment.holes){
+            const score = segment.scores.get(hole);
+            const currentBest = player.bestByHole.get(hole);
+
+            if(currentBest === undefined || score < currentBest){
+              player.bestByHole.set(hole, score);
+            }
+          }
+        }
+      }
+
+      const qualified = [...players.values()]
+        .filter(player =>
+          (player.hasFull || (player.hasFront && player.hasBack)) &&
+          containsAll(player.bestByHole, HOLES)
+        )
+        .map(player => {
+          const front = FRONT_HOLES.reduce(
+            (sum, hole) => sum + player.bestByHole.get(hole),
+            0
+          );
+          const back = BACK_HOLES.reduce(
+            (sum, hole) => sum + player.bestByHole.get(hole),
+            0
+          );
+          const total = front + back;
+
+          return {
+            ...player,
+            front,
+            back,
+            total,
+            relative: total - COURSE_PAR,
+            qualification: player.hasFull ? '18 hull' : 'Front + back'
+          };
+        })
+        .sort((a, b) =>
+          a.total - b.total ||
+          a.name.localeCompare(b.name, 'nb-NO')
+        );
+
+      let previousTotal = null;
+      let currentRank = 0;
+
+      qualified.forEach((player, index) => {
+        if(previousTotal === null || player.total !== previousTotal){
+          currentRank = index + 1;
+          previousTotal = player.total;
+        }
+        player.rank = currentRank;
+      });
+
+      return { qualified, validRoundCount };
+    }
+
+    function scoreClass(score, par){
+      const difference = score - par;
+
+      if(difference <= -2) return 'score-eagle';
+      if(difference === -1) return 'score-birdie';
+      if(difference === 1) return 'score-bogey';
+      if(difference >= 2) return 'score-double';
+
+      return '';
+    }
+
+    function relativeText(value){
+      if(value < 0) return String(value);
+      if(value > 0) return `+${value}`;
+      return 'E';
+    }
+
+    function relativeClass(value){
+      if(value < 0) return 'under';
+      if(value > 0) return 'over';
+      return 'even';
+    }
+
+    function renderHeader(){
+      const firstHeaderRow = `
+        <tr>
+          <th rowspan="2">Pos</th>
+          <th rowspan="2">Spiller</th>
+          ${FRONT_HOLES.map(hole => `<th>${hole}</th>`).join('')}
+          <th rowspan="2" class="subtotal">Ut</th>
+          ${BACK_HOLES.map((hole, index) =>
+            `<th class="${index === 0 ? 'divider-left' : ''}">${hole}</th>`
+          ).join('')}
+          <th rowspan="2" class="subtotal">Inn</th>
+          <th rowspan="2" class="total">Totalt</th>
+          <th rowspan="2">+/-</th>
+          <th rowspan="2">Krav</th>
+        </tr>
+      `;
+
+      const parHeaderRow = `
+        <tr class="par-row">
+          ${HOLES.map((hole, index) =>
+            `<th class="${hole === 10 ? 'divider-left' : ''}">Par ${PAR_BY_HOLE[hole]}</th>`
+          ).join('')}
+        </tr>
+      `;
+
+      el.head.innerHTML = firstHeaderRow + parHeaderRow;
+    }
+
+    function renderRows(players){
+      if(players.length === 0){
+        el.body.innerHTML = `
+          <tr>
+            <td colspan="25" class="message">
+              Ingen spillere oppfyller kravet ennå.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      el.body.innerHTML = players.map(player => {
+        const holeCells = HOLES.map(hole => {
+          const score = player.bestByHole.get(hole);
+          const classes = [
+            'score-cell',
+            scoreClass(score, PAR_BY_HOLE[hole]),
+            hole === 10 ? 'divider-left' : ''
+          ].filter(Boolean).join(' ');
+
+          return `<td class="${classes}" title="Hull ${hole}, par ${PAR_BY_HOLE[hole]}">${score}</td>`;
+        });
+
+        const frontCells = holeCells.slice(0, 9).join('');
+        const backCells = holeCells.slice(9).join('');
+
+        return `
+          <tr>
+            <td class="position">${player.rank}.</td>
+            <td class="player-name">${escapeHtml(player.name)}</td>
+            ${frontCells}
+            <td class="subtotal">${player.front}</td>
+            ${backCells}
+            <td class="subtotal">${player.back}</td>
+            <td class="total">${player.total}</td>
+            <td class="relative ${relativeClass(player.relative)}">${relativeText(player.relative)}</td>
+            <td class="qualification" title="${player.validRoundCount} gyldige registrerte runder">
+              ${player.qualification}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderError(message){
+      el.body.innerHTML = `
+        <tr>
+          <td colspan="25" class="message error">
+            ${escapeHtml(message)}
+          </td>
+        </tr>
+      `;
+      el.qualifiedCount.textContent = 'Kvalifiserte spillere: –';
+      el.validRoundsCount.textContent = 'Gyldige runder: –';
+    }
+
+    async function loadEclectic(){
+      renderHeader();
+
+      const { data, error } = await supabaseClient
+        .from('rounds')
+        .select('player_id, player_name, course, format, date, hole_breakdown')
+        .eq('course', COURSE_NAME)
+        .order('date', { ascending:true });
+
+      if(error){
+        console.error(error);
+        renderError(`Kunne ikke hente Solnør-rundene: ${error.message}`);
+        return;
+      }
+
+      const { qualified, validRoundCount } = buildEclecticRows(data ?? []);
+
+      el.qualifiedCount.textContent = `Kvalifiserte spillere: ${qualified.length}`;
+      el.validRoundsCount.textContent = `Gyldige runder: ${validRoundCount}`;
+
+      renderRows(qualified);
+    }
+
+    loadEclectic();
+  </script>
+</body>
+</html>
